@@ -3,6 +3,7 @@
 import ReduxProvider from './ReduxProvider';
 import ThemeProvider from './ThemeProvider';
 
+
 interface ProvidersProps {
   children: React.ReactNode;
 }

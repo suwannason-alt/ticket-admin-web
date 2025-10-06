@@ -553,6 +553,13 @@
     clsx "^2.1.1"
     prop-types "^15.8.1"
 
+"@mui/material-nextjs@^7.3.3":
+  version "7.3.3"
+  resolved "https://registry.yarnpkg.com/@mui/material-nextjs/-/material-nextjs-7.3.3.tgz#562d2e53f24967344c662c29b442b71177cfa367"
+  integrity sha512-SHqEh/GIa/HkHzBMMGvTRCVSLvXYTATZ7QN7/QxngimW5kBDI+pWzjieS8HmLDgo36rxD8g+GcLY6Bu+pilciw==
+  dependencies:
+    "@babel/runtime" "^7.28.4"
+
 "@mui/material@^7.3.4":
   version "7.3.4"
   resolved "https://registry.yarnpkg.com/@mui/material/-/material-7.3.4.tgz#945d69bafd615aaadd29b3a06b91b02d51c26e09"
