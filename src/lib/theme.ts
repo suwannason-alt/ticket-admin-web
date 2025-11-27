@@ -4,7 +4,7 @@ export const theme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#0078d4', // Microsoft blue
+      main: '#0b127aff', // Microsoft blue
       light: '#40e0d0',
       dark: '#005a9e',
       contrastText: '#ffffff',
@@ -20,8 +20,8 @@ export const theme = createTheme({
       paper: '#ffffff',
     },
     text: {
-      primary: '#323130',
-      secondary: '#605e5c',
+      primary: '#181616ff',
+      secondary: '#423c36ff',
     },
     divider: '#edebe9',
     error: {
@@ -105,10 +105,9 @@ export const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          border: '1px solid #edebe9',
-        },
-      },
+          borderRadius: '5px'
+        }
+      }
     },
     MuiAppBar: {
       styleOverrides: {

@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { profile } from '@/service/user.service';
 
 export interface Company {
   id: string;
@@ -10,23 +11,11 @@ export interface Company {
 }
 
 export interface AuthUser {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: {
-    id: string;
-    name: string;
-    permissions: Array<{
-      serviceName: string;
-      featureName: string;
-      view: boolean;
-      insert: boolean;
-      update: boolean;
-      delete: boolean;
-    }>;
-  };
-  companies: Company[];
+  uuid?: string;
+  displayName?: string;
+  pictureUrl?: string;
+  company?: string;
+  email?: string;
 }
 
 interface AuthState {
@@ -77,59 +66,6 @@ const mockCompanies: Company[] = [
   },
 ];
 
-// Async thunks
-export const login = createAsyncThunk(
-  'auth/login',
-  async (credentials: { email: string; password: string }) => {
-    // Mock API call
-    return new Promise<{ user: AuthUser; currentCompany: Company }>((resolve, reject) => {
-      setTimeout(() => {
-        if (credentials.email === 'admin@company.com' && credentials.password === 'password') {
-          const user: AuthUser = {
-            id: '1',
-            email: 'admin@company.com',
-            firstName: 'John',
-            lastName: 'Doe',
-            companies: mockCompanies,
-            role: {
-              id: '1',
-              name: 'Administrator',
-              permissions: [
-                {
-                  serviceName: 'User Management',
-                  featureName: 'Users',
-                  view: true,
-                  insert: true,
-                  update: true,
-                  delete: true,
-                },
-                {
-                  serviceName: 'User Management',
-                  featureName: 'Roles',
-                  view: true,
-                  insert: true,
-                  update: true,
-                  delete: true,
-                },
-                {
-                  serviceName: 'Company Profile',
-                  featureName: 'Profile',
-                  view: true,
-                  insert: false,
-                  update: true,
-                  delete: false,
-                },
-              ],
-            },
-          };
-          resolve({ user, currentCompany: mockCompanies[0] });
-        } else {
-          reject(new Error('Invalid credentials'));
-        }
-      }, 1000);
-    });
-  }
-);
 
 export const logout = createAsyncThunk('auth/logout', async () => {
   // Mock API call
@@ -142,47 +78,16 @@ export const logout = createAsyncThunk('auth/logout', async () => {
 
 export const getCurrentUser = createAsyncThunk('auth/getCurrentUser', async () => {
   // Mock API call to get current user from token
+  const response = await profile();
   return new Promise<{ user: AuthUser; currentCompany: Company }>((resolve) => {
-    setTimeout(() => {
       const user: AuthUser = {
-        id: '1',
-        email: 'admin@company.com',
-        firstName: 'John',
-        lastName: 'Doe',
-        companies: mockCompanies,
-        role: {
-          id: '1',
-          name: 'Administrator',
-          permissions: [
-            {
-              serviceName: 'User Management',
-              featureName: 'Users',
-              view: true,
-              insert: true,
-              update: true,
-              delete: true,
-            },
-            {
-              serviceName: 'User Management',
-              featureName: 'Roles',
-              view: true,
-              insert: true,
-              update: true,
-              delete: true,
-            },
-            {
-              serviceName: 'Company Profile',
-              featureName: 'Profile',
-              view: true,
-              insert: false,
-              update: true,
-              delete: false,
-            },
-          ],
-        },
+        uuid: response.data.uuid,
+        displayName: response.data.displayName,
+        pictureUrl: '',
+        email: response.data.email,
       };
       resolve({ user, currentCompany: mockCompanies[0] });
-    }, 500);
+
   });
 });
 
@@ -216,23 +121,6 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Login
-      .addCase(login.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(login.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload.user;
-        state.currentCompany = action.payload.currentCompany;
-        state.availableCompanies = action.payload.user.companies;
-        state.isAuthenticated = true;
-      })
-      .addCase(login.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'Login failed';
-        state.isAuthenticated = false;
-      })
       // Logout
       .addCase(logout.pending, (state) => {
         state.loading = true;
@@ -252,7 +140,6 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload.user;
         state.currentCompany = action.payload.currentCompany;
-        state.availableCompanies = action.payload.user.companies;
         state.isAuthenticated = true;
       })
       .addCase(getCurrentUser.rejected, (state) => {

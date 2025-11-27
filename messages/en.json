@@ -1,0 +1,31 @@
+{
+    "nav": {
+        "dashboard": "Dashboard",
+        "usermanagement": "User management",
+        "users": "Users",
+        "roleAndPermission": "Role & Permissions",
+        "invitations": "Invitations",
+        "category": "Category",
+        "companyProfile": "Company Profile",
+        "settings": "Settings"
+    },
+    "category": {
+        "create": "Create category",
+        "name": "Category name",
+        "description": "Description",
+        "mainCategory": "Main category",
+        "assignTo": "Assign to",
+        "submit": "Submit",
+        "close": "Close"
+    },
+    "userlist" : {
+        "users": "Users",
+        "description": "Manage user accounts and permissions",
+        "invite": "Invite User",
+        "inviteNew": "Invite New User",
+        "email": "Email Address",
+        "role": "Role",
+        "sendInvite": "Send invite",
+        "cancel": "Cancel"
+    }
+}

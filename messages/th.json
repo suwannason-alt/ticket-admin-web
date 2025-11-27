@@ -1,0 +1,31 @@
+{
+    "nav": {
+        "dashboard": "แดชบอร์ด",
+        "usermanagement": "จัดการผู้ใช้งาน",
+        "users": "ผู้ใช้งาน",
+        "roleAndPermission": "กำหนดสิทธิ์การเข้าถึง",
+        "invitations": "เชิญผู้ใช้งาน",
+        "category": "หมวดหมู่",
+        "companyProfile": "ข้อมูลบริษัท",
+        "settings": "ตั้งค่า"
+    },
+    "category": {
+        "create": "สร้างหมวดหมู่",
+        "name": "ชื่อหมวดหมู่",
+        "description": "คำอธิบาย",
+        "mainCategory": "หมวดหมู่หลัก",
+        "assignTo": "มอบหมายงาน",
+        "submit": "ส่งข้อมูล",
+        "close": "ปิด"
+    },
+     "userlist" : {
+        "users": "ผู้ใช้งาน",
+        "description": "จัดการบัญชีและสิทธิ์ผู้ใช้งาน",
+        "invite": "เชิญผู้ใช้งาน",
+        "inviteNew": "เชิญผู้ใช้ใหม่",
+        "email": "อีเมล",
+        "role": "สิทธิ์การใช้งาน",
+        "sendInvite": "ส่งคำเชิญ",
+        "cancel": "ยกเลิก"
+    }
+}

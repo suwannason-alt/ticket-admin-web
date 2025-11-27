@@ -21,6 +21,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useAppDispatch, useAppSelector } from '../../lib/hooks';
 import { inviteUser, fetchRoles } from '../../lib/slices/userManagementSlice';
+import { useTranslations } from 'next-intl';
 
 interface InviteUserDialogProps {
   open: boolean;
@@ -38,6 +39,7 @@ interface FormData {
 }
 
 export default function InviteUserDialog({ open, onClose }: InviteUserDialogProps) {
+  const t = useTranslations('userlist')
   const dispatch = useAppDispatch();
   const { roles, loading, error } = useAppSelector((state) => state.userManagement);
   const { user } = useAppSelector((state) => state.auth);
@@ -86,7 +88,7 @@ export default function InviteUserDialog({ open, onClose }: InviteUserDialogProp
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Invite New User</DialogTitle>
+      <DialogTitle>{t('inviteNew')}</DialogTitle>
       <DialogContent>
         <Box component="form" sx={{ mt: 2 }}>
           {error && (
@@ -101,7 +103,7 @@ export default function InviteUserDialog({ open, onClose }: InviteUserDialogProp
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Email Address"
+                label={t('email')}
                 type="email"
                 fullWidth
                 margin="normal"
@@ -117,7 +119,7 @@ export default function InviteUserDialog({ open, onClose }: InviteUserDialogProp
             control={control}
             render={({ field }) => (
               <FormControl fullWidth margin="normal" error={!!errors.roleId}>
-                <InputLabel>Role</InputLabel>
+                <InputLabel>{t('role')}</InputLabel>
                 <Select
                   {...field}
                   label="Role"
@@ -145,14 +147,14 @@ export default function InviteUserDialog({ open, onClose }: InviteUserDialogProp
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
+        <Button onClick={handleClose}>{t('cancel')}</Button>
         <Button
           onClick={handleSubmit(onSubmit)}
           variant="contained"
           disabled={!isValid || loading.invitations}
           startIcon={loading.invitations ? <CircularProgress size={20} /> : null}
         >
-          Send Invitation
+          {t('sendInvite')}
         </Button>
       </DialogActions>
     </Dialog>

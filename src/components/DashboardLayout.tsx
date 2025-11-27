@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import React, { useState, useEffect } from 'react';
 import {
@@ -30,15 +30,19 @@ import {
   ExpandMore,
   PersonAdd,
   Security,
-  AccountCircle,
   Logout,
   Notifications,
   SwapHoriz,
+  Category,
+  LanguageOutlined,
 } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '../lib/hooks';
 import { getCurrentUser, logout } from '../lib/slices/authSlice';
 import CompanySwitcherDialog from './CompanySwitcher/CompanySwitcherDialog';
 import NotificationDisplay from './Notification/notification';
+import { useTranslations, useLocale } from 'next-intl';
+import Cookies from 'js-cookie';
+
 
 const drawerWidth = 280;
 
@@ -58,33 +62,36 @@ interface NavItem {
 
 export default function DashboardLayout({ children, onNavigate }: DashboardLayoutProps) {
 
+  const t = useTranslations('nav');
+  const locale = useLocale();
+
   const navigationItems: NavItem[] = [
     {
       id: 'dashboard',
-      label: 'Dashboard',
+      label: t('dashboard'),
       icon: <Dashboard />,
       path: '/',
     },
     {
       id: 'user-management',
-      label: 'User Management',
+      label: t('usermanagement'),
       icon: <People />,
       children: [
         {
           id: 'users',
-          label: 'Users',
+          label: t('users'),
           icon: <People />,
           path: '/users',
         },
         {
           id: 'roles',
-          label: 'Roles & Permissions',
+          label: t('roleAndPermission'),
           icon: <Security />,
           path: '/roles',
         },
         {
           id: 'invitations',
-          label: 'Invitations',
+          label: t('invitations'),
           icon: <PersonAdd />,
           path: '/invitations',
           badge: 3,
@@ -92,14 +99,20 @@ export default function DashboardLayout({ children, onNavigate }: DashboardLayou
       ],
     },
     {
+      id: 'category',
+      label: t('category'),
+      icon: <Category />,
+      path: '/category',
+    },
+    {
       id: 'company',
-      label: 'Company Profile',
+      label: t('companyProfile'),
       icon: <Business />,
       path: '/company',
     },
     {
       id: 'settings',
-      label: 'Settings',
+      label: t('settings'),
       icon: <Settings />,
       path: '/settings',
     },
@@ -109,6 +122,7 @@ export default function DashboardLayout({ children, onNavigate }: DashboardLayou
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set(['user-management']));
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [notificationAnchorEl, setNotificationAnchorEl] = useState<null | HTMLElement>(null);
+  const [languageAnchorEl, setLanguageAnchorEl] = useState<null | HTMLElement>(null);
   const [activeItem, setActiveItem] = useState('dashboard');
   const [currentTitle, setCurrentTitle] = useState('Dashboard');
   const [companySwitcherOpen, setCompanySwitcherOpen] = useState(false);
@@ -116,11 +130,11 @@ export default function DashboardLayout({ children, onNavigate }: DashboardLayou
   const dispatch = useAppDispatch();
   const { user, currentCompany, isAuthenticated } = useAppSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      dispatch(getCurrentUser());
-    }
-  }, [dispatch, isAuthenticated]);
+  // useEffect(() => {
+  //   if (!isAuthenticated) {
+  //     dispatch(getCurrentUser());
+  //   }
+  // }, [dispatch, isAuthenticated]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -150,16 +164,20 @@ export default function DashboardLayout({ children, onNavigate }: DashboardLayou
     }
   };
 
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
   const handleProfileMenuClose = () => {
     setAnchorEl(null);
   };
 
   const handleNotificationClick = (event: React.MouseEvent<HTMLElement>) => {
     setNotificationAnchorEl(event.currentTarget);
+  };
+
+  const handleLanguageClick = (event: React.MouseEvent<HTMLElement>) => {
+    setLanguageAnchorEl(event.currentTarget);
+  }
+
+  const handleLanguageMenuClose = () => {
+    setLanguageAnchorEl(null);
   };
 
 
@@ -173,12 +191,21 @@ export default function DashboardLayout({ children, onNavigate }: DashboardLayou
     handleProfileMenuClose();
   };
 
+  const handleLanguageChange = (lang: string) => {
+    if (locale !== lang) {
+      Cookies.set('locale', lang);
+      window.location.reload()
+    } else {
+      setLanguageAnchorEl(null);
+    }
+
+  }
+
 
   const renderNavItem = (item: NavItem, level = 0) => {
     const hasChildren = item.children && item.children.length > 0;
     const isExpanded = expandedItems.has(item.id);
     const isActive = activeItem === item.id;
-
     return (
       <React.Fragment key={item.id}>
         <ListItem disablePadding sx={{ pl: level * 2 }}>
@@ -233,7 +260,7 @@ export default function DashboardLayout({ children, onNavigate }: DashboardLayou
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
         <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 600 }}>
-          Admin Dashboard
+          Admin web
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {currentCompany?.name || 'Loading...'}
@@ -250,14 +277,14 @@ export default function DashboardLayout({ children, onNavigate }: DashboardLayou
         <Box sx={{ p: 2, borderTop: 1, borderColor: 'divider' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main' }}>
-              {user.firstName[0]}{user.lastName[0]}
+              S
             </Avatar>
             <Box sx={{ flex: 1, minWidth: 0 }}>
               <Typography variant="body2" noWrap>
-                {user.firstName} {user.lastName}
+                Suwannason Sisuk
               </Typography>
               <Typography variant="caption" color="text.secondary" noWrap>
-                {user.role.name}
+                Admin
               </Typography>
             </Box>
           </Box>
@@ -266,144 +293,152 @@ export default function DashboardLayout({ children, onNavigate }: DashboardLayou
     </Box>
   );
 
-    return (
-      <>
-        <Box sx={{ display: 'flex', height: '100vh' }}>
-          <AppBar
-            position="fixed"
-            sx={{
-              width: { md: `calc(100% - ${drawerWidth}px)` },
-              ml: { md: `${drawerWidth}px` },
-            }}
-          >
-            <Toolbar>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                edge="start"
-                onClick={handleDrawerToggle}
-                sx={{ mr: 2, display: { md: 'none' } }}
-              >
-                <MenuIcon />
-              </IconButton>
+  return (
+    <>
+      <Box sx={{ display: 'flex', height: '100vh' }}>
+        <AppBar
+          position="fixed"
+          sx={{
+            width: { md: `calc(100% - ${drawerWidth}px)` },
+            ml: { md: `${drawerWidth}px` },
+          }}
+        >
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { md: 'none' } }}
+            >
+              <MenuIcon />
+            </IconButton>
 
-              <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-                {currentTitle}
-              </Typography>
+            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+              {currentTitle}
+            </Typography>
 
-              <IconButton color="inherit" sx={{ mr: 1 }} onClick={handleNotificationClick}>
-                <Badge badgeContent={3} color="error">
-                  <Notifications />
-                </Badge>
-              </IconButton>
+            <IconButton color={'info'} sx={{ mr: 1 }} onClick={handleLanguageClick}>
+              <Badge badgeContent={locale.toUpperCase()}>
+                <LanguageOutlined />
+              </Badge>
+            </IconButton>
 
-              {user && (
-                <>
-                  <IconButton
-                    color="inherit"
-                    onClick={handleProfileMenuOpen}
-                    sx={{ ml: 1 }}
-                  >
-                    <Avatar sx={{ width: 32, height: 32 }}>
-                      {user.firstName[0]}{user.lastName[0]}
-                    </Avatar>
-                  </IconButton>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleProfileMenuClose}
-                    anchorOrigin={{
-                      vertical: 'bottom',
-                      horizontal: 'right',
-                    }}
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                  >
-                    <MenuItem onClick={handleProfileMenuClose}>
-                      <ListItemIcon>
-                        <AccountCircle fontSize="small" />
-                      </ListItemIcon>
-                      Profile
-                    </MenuItem>
-                    <MenuItem onClick={handleSwitchCompany}>
-                      <ListItemIcon>
-                        <SwapHoriz fontSize="small" />
-                      </ListItemIcon>
-                      Switch Company
-                    </MenuItem>
-                    <Divider />
-                    <MenuItem onClick={handleLogout}>
-                      <ListItemIcon>
-                        <Logout fontSize="small" />
-                      </ListItemIcon>
-                      Logout
-                    </MenuItem>
-                  </Menu>
-                </>
-              )}
-            </Toolbar>
-          </AppBar>
-
-
-          <NotificationDisplay anchorEl={notificationAnchorEl} setAnchorEl={setNotificationAnchorEl} />
-
-          <CompanySwitcherDialog
-            open={companySwitcherOpen}
-            onClose={() => setCompanySwitcherOpen(false)}
-          />
-
-          <Box
-            component="nav"
-            sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
-          >
-            <Drawer
-              variant="temporary"
-              open={mobileOpen}
-              onClose={handleDrawerToggle}
-              ModalProps={{ keepMounted: true }}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-                '& .MuiDrawer-paper': {
-                  boxSizing: 'border-box',
-                  width: drawerWidth,
-                },
+            <Menu
+              anchorEl={languageAnchorEl}
+              open={Boolean(languageAnchorEl)}
+              onClose={handleLanguageMenuClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right'
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right'
               }}
             >
-              {drawer}
-            </Drawer>
-            <Drawer
-              variant="permanent"
-              sx={{
-                display: { xs: 'none', md: 'block' },
-                '& .MuiDrawer-paper': {
-                  boxSizing: 'border-box',
-                  width: drawerWidth,
-                },
-              }}
-              open
-            >
-              {drawer}
-            </Drawer>
-          </Box>
+              <MenuItem onClick={() => handleLanguageChange('th')}>TH</MenuItem>
+              <MenuItem onClick={() => handleLanguageChange('en')}>EN</MenuItem>
+            </Menu>
 
-          <Box
-            component="main"
+            <IconButton color="inherit" sx={{ mr: 1 }} onClick={handleNotificationClick}>
+              <Badge badgeContent={3} color="error">
+                <Notifications />
+              </Badge>
+            </IconButton>
+
+            {user && (
+              <>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleProfileMenuClose}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                >
+                  <MenuItem onClick={handleSwitchCompany}>
+                    <ListItemIcon>
+                      <SwapHoriz fontSize="small" />
+                    </ListItemIcon>
+                    Switch Company
+                  </MenuItem>
+                  <Divider />
+                  <MenuItem onClick={handleLogout}>
+                    <ListItemIcon>
+                      <Logout fontSize="small" />
+                    </ListItemIcon>
+                    Logout
+                  </MenuItem>
+                </Menu>
+              </>
+            )}
+          </Toolbar>
+        </AppBar>
+
+
+        <NotificationDisplay anchorEl={notificationAnchorEl} setAnchorEl={setNotificationAnchorEl} />
+
+        <CompanySwitcherDialog
+          open={companySwitcherOpen}
+          onClose={() => setCompanySwitcherOpen(false)}
+        />
+
+        <Box
+          component="nav"
+          sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
+        >
+          <Drawer
+            variant="temporary"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{ keepMounted: true }}
             sx={{
-              flexGrow: 1,
-              width: { md: `calc(100% - ${drawerWidth}px)` },
-              height: '100vh',
-              overflow: 'auto',
+              display: { xs: 'block', md: 'none' },
+              '& .MuiDrawer-paper': {
+                boxSizing: 'border-box',
+                width: drawerWidth,
+              },
             }}
           >
-            <Toolbar />
-            <Box sx={{ p: 3 }}>
-              {children}
-            </Box>
+            {drawer}
+          </Drawer>
+          <Drawer
+            variant="permanent"
+            sx={{
+              display: { xs: 'none', md: 'block' },
+              '& .MuiDrawer-paper': {
+                boxSizing: 'border-box',
+                width: drawerWidth,
+              },
+            }}
+            open
+          >
+            {drawer}
+          </Drawer>
+        </Box>
+
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            width: { md: `calc(100% - ${drawerWidth}px)` },
+            height: '100vh',
+            overflow: 'auto',
+          }}
+        >
+          <Toolbar />
+          <Box sx={{ p: 3 }}>
+            {children}
           </Box>
         </Box>
-      </>
-    );
+      </Box>
+    </>
+  );
 
 }

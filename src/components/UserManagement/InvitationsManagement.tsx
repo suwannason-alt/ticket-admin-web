@@ -15,9 +15,11 @@ import {
 import {
   PersonAdd,
 } from '@mui/icons-material';
-import React from 'react';
+import React, { useState } from 'react';
+import InviteUserDialog from './InviteUserDialog';
 
 export default function InvitationsManagement() {
+  const [openInvite, setOpenInvite] = useState<boolean>(false);
 
   const [mockInvitations, setMockInvitations] = React.useState(
     [
@@ -66,6 +68,7 @@ export default function InvitationsManagement() {
 
   return (
     <Box>
+      <InviteUserDialog open={openInvite} onClose={() => setOpenInvite(false)} />
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Box>
           <Typography variant="h4" gutterBottom>
@@ -78,7 +81,7 @@ export default function InvitationsManagement() {
         <Button
           variant="contained"
           startIcon={<PersonAdd />}
-          onClick={() => alert('Invite user functionality would open here')}
+          onClick={() => setOpenInvite(true)}
         >
           Send Invitation
         </Button>

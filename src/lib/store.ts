@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import userManagementReducer from './slices/userManagementSlice';
 import companyProfileReducer from './slices/companyProfileSlice';
 import authReducer from './slices/authSlice';
+import envReducer from './slices/envSlice';
 
 export const store = configureStore({
   reducer: {
     userManagement: userManagementReducer,
     companyProfile: companyProfileReducer,
     auth: authReducer,
+    env: envReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
