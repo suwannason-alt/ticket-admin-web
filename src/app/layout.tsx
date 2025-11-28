@@ -7,6 +7,7 @@ import { EnvScript } from '@daniel-rose/envex/script';
 import { EnvexProvider } from '@daniel-rose/envex';
 import { getPublicEnv } from '@daniel-rose/envex/server';
 import TokenProvider from '../components/Providers/TokenPrivider';
+import EnvProvider from '../components/Providers/envProvider';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,9 +31,11 @@ export default async function RootLayout({
           <AppRouterCacheProvider>
             <NextIntlClientProvider>
               <Providers>
-                <TokenProvider>
-                  {children}
-                </TokenProvider>
+                <EnvProvider>
+                  <TokenProvider>
+                    {children}
+                  </TokenProvider>
+                </EnvProvider>
               </Providers>
             </NextIntlClientProvider>
           </AppRouterCacheProvider>

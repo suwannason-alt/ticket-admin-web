@@ -1,5 +1,5 @@
 
-import RolesAndPermissions from '../../components/UserManagement/RolesAndPermissions';
+import RolesAndPermissions from '../../components/UserManagement/roles';
 
 export default function RolesPage() {
   return (

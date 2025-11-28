@@ -70,7 +70,7 @@ export default function InviteUserDialog({ open, onClose }: InviteUserDialogProp
         await dispatch(inviteUser({
           email: data.email,
           roleId: data.roleId,
-          invitedBy: user.id,
+          invitedBy: user.uuid || '',
         })).unwrap();
 
         reset();

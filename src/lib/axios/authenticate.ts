@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 
 const TOKEN_COOKIE_KEY = 'token';
 const REFRESH_COKIE_KEY = 'refreshToken'
-const REFRESH_TOKEN_PATH = '/api/v1/user/refresh'
+const REFRESH_TOKEN_PATH = 'credential/refresh'
 
 let cachedEnv: any = null;
 let envPromise: any = null;
@@ -73,7 +73,7 @@ export default async function authenticated() {
             Cookies.remove(TOKEN_COOKIE_KEY);
             Cookies.remove(REFRESH_COKIE_KEY);
             if (typeof window !== 'undefined') {
-                 window.location.href = '/login'
+                 window.location.href = '/'
             }
             throw error;
         }
@@ -84,20 +84,24 @@ export default async function authenticated() {
     }, async (error) => {
 
         const originalRequest = error.config;
+        // console.log(error.response?.status === 401 && originalRequest.url.indexOf(REFRESH_TOKEN_PATH) !== -1);
+        console.log({ originalRequest: originalRequest.url, REFRESH_TOKEN_PATH, idxOf: originalRequest.url.indexOf(REFRESH_TOKEN_PATH) });
+        console.log(error.response?.status);
         
-        if (error.response?.status === 401 && originalRequest.url !== REFRESH_TOKEN_PATH) {
+        
+        if (error.response?.status === 401 && originalRequest.url.indexOf(REFRESH_TOKEN_PATH) === -1) {
+            console.log('call refresh')
+            // const newAccessTokenData = await refreshToken();
             
-            const newAccessTokenData = await refreshToken();
-            
-            if (newAccessTokenData?.data?.token) {
-                const newToken = newAccessTokenData.data.token;
+            // if (newAccessTokenData?.data?.token) {
+            //     const newToken = newAccessTokenData.data.token;
                 
-                Cookies.set(TOKEN_COOKIE_KEY, newToken);
-                Cookies.set(REFRESH_COKIE_KEY, newAccessTokenData.data.refreshToken);
-                originalRequest.headers['Authorization'] = 'Bearer ' + newToken;
+            //     Cookies.set(TOKEN_COOKIE_KEY, newToken);
+            //     Cookies.set(REFRESH_COKIE_KEY, newAccessTokenData.data.refreshToken);
+            //     originalRequest.headers['Authorization'] = 'Bearer ' + newToken;
                 
-                return api(originalRequest)
-            }
+            //     return api(originalRequest)
+            // }
         }
 
         return Promise.reject(error)

@@ -27,5 +27,16 @@
         "role": "สิทธิ์การใช้งาน",
         "sendInvite": "ส่งคำเชิญ",
         "cancel": "ยกเลิก"
+    },
+    "roleAndPermission": {
+        "title": "หน้าที่และสิทธิ์การใช้งาน",
+        "description": "จัดการบัญชีและสิทธิ์ผู้ใช้งาน",
+        "createRole": "สร้างสิทธิ์",
+        "createNewRole": "สร้างหน้าที่ใหม่",
+        "roleName": "ชื่อของหน้าที่",
+        "roleNamePlace": "ตัวอย่าง Content Manager",
+        "createDescription": "รายละเอียดอื่น ๆ",
+        "createDescriptionPlace": "อธิบายบทบาทหน้าที่ของกลุ่มนี้",
+        "cancel": "ยกเลิก"
     }
 }

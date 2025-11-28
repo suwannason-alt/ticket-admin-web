@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 import DashboardLayout from '../components/DashboardLayout';
 import UsersList from '../components/UserManagement/UsersList';
-import RolesAndPermissions from '../components/UserManagement/RolesAndPermissions';
+import RolesAndPermissions from '../components/UserManagement/roles';
 import InvitationsManagement from '../components/UserManagement/InvitationsManagement';
 import CompanyProfileForm from '../components/CompanyProfile/CompanyProfileForm';
 import SettingsPage from '../components/Settings/SettingsPage';

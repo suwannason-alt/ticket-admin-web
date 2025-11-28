@@ -1,11 +1,13 @@
 'use server'
 
-import { getPublicEnvByName } from '@daniel-rose/envex/server'
+import { getPublicEnvByName, getEnvByName } from '@daniel-rose/envex/server'
 
 export default async function getENV() {
     const userAPI = await getPublicEnvByName('NEXT_PUBLIC_USER_API') || ''
     const credentialAPI = await getPublicEnvByName('NEXT_PUBLIC_CREDENTIAL_API') || ''
-    const service = await getPublicEnvByName('NEXT_PUBLIC_SERVICE_UUID') || ''
+    const service = await getEnvByName('SERVICE_UUID') || ''
+    const authWeb = await getPublicEnvByName('NEXT_PUBLIC_AUTH_WEB') || ''
+    
 
-    return { userAPI, credentialAPI, service }
+    return { userAPI, credentialAPI, service, authWeb }
 }

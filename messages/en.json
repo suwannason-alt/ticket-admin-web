@@ -27,5 +27,16 @@
         "role": "Role",
         "sendInvite": "Send invite",
         "cancel": "Cancel"
+    },
+    "roleAndPermission": {
+        "title": "Roles & Permissions",
+        "description": "Manage user roles and their access permissions",
+        "createRole": "Create role",
+        "createNewRole": "Create new role",
+        "roleName": "Role name",
+        "roleNamePlace": "e.g, Content Manager",
+        "createDescription": "Description",
+        "createDescriptionPlace": "Describe the role's responsibilities and access level",
+        "cancel": "Cancel"
     }
 }
