@@ -86,45 +86,12 @@ export const fetchCompanyProfile = createAsyncThunk(
   }
 );
 
-export const updateCompanyProfile = createAsyncThunk(
-  'companyProfile/updateProfile',
-  async (updates: Partial<CompanyProfile>) => {
-    // Mock API call
-    return new Promise<CompanyProfile>((resolve) => {
-      setTimeout(() => {
-        // In a real app, this would merge with existing data from the server
-        const updatedProfile: CompanyProfile = {
-          ...updates,
-          id: '1',
-          updatedAt: new Date().toISOString(),
-        } as CompanyProfile;
-        resolve(updatedProfile);
-      }, 1000);
-    });
-  }
-);
-
 const companyProfileSlice = createSlice({
   name: 'companyProfile',
   initialState,
   reducers: {
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
-    },
-    updateProfileField: (state, action: PayloadAction<{ field: keyof CompanyProfile; value: any }>) => {
-      if (state.profile) {
-        (state.profile as any)[action.payload.field] = action.payload.value;
-      }
-    },
-    updateAddress: (state, action: PayloadAction<Partial<CompanyProfile['address']>>) => {
-      if (state.profile) {
-        state.profile.address = { ...state.profile.address, ...action.payload };
-      }
-    },
-    updateSettings: (state, action: PayloadAction<Partial<CompanyProfile['settings']>>) => {
-      if (state.profile) {
-        state.profile.settings = { ...state.profile.settings, ...action.payload };
-      }
     },
   },
   extraReducers: (builder) => {
@@ -142,27 +109,11 @@ const companyProfileSlice = createSlice({
         state.loading = false;
         state.error = 'Failed to fetch company profile';
       })
-      // Update company profile
-      .addCase(updateCompanyProfile.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(updateCompanyProfile.fulfilled, (state, action) => {
-        state.loading = false;
-        state.profile = action.payload;
-      })
-      .addCase(updateCompanyProfile.rejected, (state) => {
-        state.loading = false;
-        state.error = 'Failed to update company profile';
-      });
   },
 });
 
 export const {
   setError,
-  updateProfileField,
-  updateAddress,
-  updateSettings,
 } = companyProfileSlice.actions;
 
 export default companyProfileSlice.reducer;

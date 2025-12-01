@@ -18,7 +18,7 @@
         "submit": "ส่งข้อมูล",
         "close": "ปิด"
     },
-     "userlist" : {
+    "userlist": {
         "users": "ผู้ใช้งาน",
         "description": "จัดการบัญชีและสิทธิ์ผู้ใช้งาน",
         "invite": "เชิญผู้ใช้งาน",
@@ -38,5 +38,14 @@
         "createDescription": "รายละเอียดอื่น ๆ",
         "createDescriptionPlace": "อธิบายบทบาทหน้าที่ของกลุ่มนี้",
         "cancel": "ยกเลิก"
+    },
+    "companyProfile": {
+        "title": "ข้อมูลบริษัท",
+        "description": "จัดข้อมูลภายของบริษัท",
+        "sections": "เมนู",
+        "basicInfimation": "ข้อมูลพื้นฐาน",
+        "address": "ที่อยู่",
+        "companyAddress": "ที่อยู่บริษัท",
+        "editProfile": "แก้ไขข้อมูล"
     }
 }

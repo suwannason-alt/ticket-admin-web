@@ -11,7 +11,6 @@ import {
   ListItemAvatar,
   Avatar,
   Divider,
-  Fade,
 } from '@mui/material';
 import {
   People,
@@ -23,21 +22,17 @@ import {
 } from '@mui/icons-material';
 import React, { JSX, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../lib/hooks';
-import { fetchUsers, fetchRoles } from '../../lib/slices/userManagementSlice';
 import { fetchCompanyProfile } from '../../lib/slices/companyProfileSlice';
 import Preload from '../Global/preload';
 
 export default function DashboardView() {
   const dispatch = useAppDispatch();
-  const { users, roles, invitations } = useAppSelector((state) => state.userManagement);
   const { profile } = useAppSelector((state) => state.companyProfile);
   const { user } = useAppSelector((state) => state.auth);
 
   const [render, setRender] = React.useState<JSX.Element | null>(null);
 
   useEffect(() => {
-    dispatch(fetchUsers());
-    dispatch(fetchRoles());
     dispatch(fetchCompanyProfile());
   }, [dispatch]);
 
@@ -101,37 +96,6 @@ export default function DashboardView() {
     },
   ];
 
-  const stats = [
-    {
-      title: 'Total Users',
-      value: users.length,
-      icon: <People sx={{ fontSize: 40, color: 'primary.main' }} />,
-      change: '+12%',
-      changeType: 'positive',
-    },
-    {
-      title: 'Active Roles',
-      value: roles.length,
-      icon: <Security sx={{ fontSize: 40, color: 'secondary.main' }} />,
-      change: '+2',
-      changeType: 'positive',
-    },
-    {
-      title: 'Pending Invitations',
-      value: invitations.length,
-      icon: <PersonAdd sx={{ fontSize: 40, color: 'warning.main' }} />,
-      change: '3 new',
-      changeType: 'neutral',
-    },
-    {
-      title: 'Company Score',
-      value: '95%',
-      icon: <TrendingUp sx={{ fontSize: 40, color: 'success.main' }} />,
-      change: '+5%',
-      changeType: 'positive',
-    },
-  ];
-
   return (
     <Box>
       {/* Welcome Section */}
@@ -143,48 +107,6 @@ export default function DashboardView() {
           Here's what's happening with your organization today.
         </Typography>
       </Box>
-      <Fade in={true} timeout={1000}>
-
-        {/* Stats Cards */}
-        <Box sx={{
-          display: 'grid',
-          gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
-          gap: 3,
-          mb: 4
-        }}>
-          {stats.map((stat, index) => (
-            <Box key={index}>
-              <Card>
-                <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Box>
-                      <Typography variant="h4" fontWeight={600} gutterBottom>
-                        {stat.value}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary" gutterBottom>
-                        {stat.title}
-                      </Typography>
-                      <Chip
-                        label={stat.change}
-                        size="small"
-                        color={
-                          stat.changeType === 'positive'
-                            ? 'success'
-                            : stat.changeType === 'negative'
-                              ? 'error'
-                              : 'default'
-                        }
-                      />
-                    </Box>
-                    <Box>{stat.icon}</Box>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Box>
-          ))}
-        </Box>
-
-      </Fade>
 
 
       <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' }, gap: 3 }}>

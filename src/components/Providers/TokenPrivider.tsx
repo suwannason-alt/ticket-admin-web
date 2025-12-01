@@ -1,11 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import { permissions } from '@/service/user.service';
 import { useAppSelector, useAppDispatch } from '@/lib/hooks';
 import { getCurrentUser } from '@/lib/slices/authSlice';
 import { Skeleton } from '@mui/material';
 import Cookies from 'js-cookie';
+import { fetchRoles, fetchUsers } from '@/lib/slices/userManagementSlice';
 
 export default function TokenProvider({ children }: { children: React.ReactNode }) {
 
@@ -23,21 +23,26 @@ export default function TokenProvider({ children }: { children: React.ReactNode 
         const initializeAccess = async () => {
             const token = Cookies.get('token');
             let userFetched = false;
+            let roleFetched = false;
 
             if (token) {
                 const userAction = await dispatch(getCurrentUser());
-                
+                const roleAction = await dispatch(fetchRoles())
+                dispatch(fetchUsers())
+
                 if (userAction.meta.requestStatus === 'fulfilled' && userAction.payload) {
                     userFetched = true;
                 }
-
+                if (roleAction.meta.requestStatus === 'fulfilled' && roleAction.payload) {
+                    roleFetched = true;
+                }
                 let access = false;
                 try {
-                    const userPermission = await permissions();
                     const serviceUuid = reduxEnv.service;
+                    const roles: any = roleAction.payload
 
-                    if (userPermission && userPermission.data) {
-                        const canAction = userPermission.data.find((perm: any) => perm.uuid === serviceUuid);
+                    if (roleAction.payload) {
+                        const canAction = roles.permissions.find((perm: any) => perm.service_uuid === serviceUuid);
                         if (canAction) {
                             access = true;
                         }
@@ -48,7 +53,7 @@ export default function TokenProvider({ children }: { children: React.ReactNode 
 
                 if (isMounted) {
                     setHasAccess(access);
-                    setIsInitialized(true); 
+                    setIsInitialized(true);
                 }
             } else {
                 if (reduxEnv.authWeb) {
@@ -67,7 +72,7 @@ export default function TokenProvider({ children }: { children: React.ReactNode 
         return () => {
             isMounted = false;
         };
-    }, [dispatch, reduxEnv, isInitialized]); 
+    }, [dispatch, reduxEnv, isInitialized]);
 
 
     if (reduxEnv.loading || !isInitialized) {

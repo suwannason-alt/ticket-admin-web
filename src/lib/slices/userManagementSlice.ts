@@ -1,7 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { getUserRole } from '@/service/role.service';
 
 export interface Permission {
-  id: string;
+  uuid: string;
+  service_uuid: string;
   serviceName: string;
   featureName: string;
   view: boolean;
@@ -11,12 +13,13 @@ export interface Permission {
 }
 
 export interface Role {
-  id: string;
+  user_uuid: string;
   name: string;
-  description: string;
   permissions: Permission[];
   createdAt: string;
   updatedAt: string;
+  role_uuid: string;
+  company_uuid: string | null;
 }
 
 export interface User {
@@ -43,7 +46,7 @@ export interface UserInvitation {
 
 interface UserManagementState {
   users: User[];
-  roles: Role[];
+  roles: Role;
   permissions: Permission[];
   invitations: UserInvitation[];
   services: string[];
@@ -58,7 +61,15 @@ interface UserManagementState {
 
 const initialState: UserManagementState = {
   users: [],
-  roles: [],
+  roles: {
+    user_uuid: '',
+    name: '',
+    permissions: [],
+    createdAt: '',
+    updatedAt: '',
+    role_uuid: '',
+    company_uuid: null,
+  },
   permissions: [],
   invitations: [],
   services: ['User Management', 'Content Management', 'Analytics', 'Settings', 'Billing', 'Security'],
@@ -83,12 +94,13 @@ export const fetchUsers = createAsyncThunk('userManagement/fetchUsers', async ()
           firstName: 'John',
           lastName: 'Doe',
           role: {
-            id: '1',
+            user_uuid: '1',
             name: 'Administrator',
-            description: 'Full system access',
             permissions: [],
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
+            company_uuid: null,
+            role_uuid: '',
           },
           status: 'active',
           lastLogin: new Date().toISOString(),
@@ -99,30 +111,31 @@ export const fetchUsers = createAsyncThunk('userManagement/fetchUsers', async ()
   });
 });
 
-export const fetchRoles = createAsyncThunk('userManagement/fetchRoles', async () => {
-  // Mock API call
-  return new Promise<Role[]>((resolve) => {
-    setTimeout(() => {
-      resolve([
-        {
-          id: '1',
-          name: 'Administrator',
-          description: 'Full system access',
-          permissions: [],
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-        {
-          id: '2',
-          name: 'Editor',
-          description: 'Content management access',
-          permissions: [],
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-      ]);
-    }, 1000);
-  });
+export const fetchRoles = createAsyncThunk<Role>('userManagement/fetchRoles', async () => {
+  const userRole = await getUserRole()
+  const result = userRole.data;
+  const permissions: any[] = [];
+  result.permission.map((item: any) => {
+    permissions.push({
+      uuid: item.uuid,
+      service_uuid: item.service_uuid,
+      serviceName: item.serviceName,
+      featureName: item.featureName,
+      view: item.permission.view,
+      insert: item.permission.insert,
+      update: item.permission.update,
+      delete: item.permission.delete,
+    })
+  })
+  return {
+    user_uuid: result.role.user_uuid,
+    name: result.role.name,
+    permissions,
+    createdAt: result.role.createdAt,
+    updatedAt: result.role.updatedAt,
+    role_uuid: result.role.role_uuid,
+    company_uuid: result.role.company_uuid
+  }
 });
 
 export const inviteUser = createAsyncThunk(
@@ -153,12 +166,13 @@ export const createRole = createAsyncThunk(
     return new Promise<Role>((resolve) => {
       setTimeout(() => {
         const role: Role = {
-          id: Math.random().toString(36).substr(2, 9),
+          user_uuid: Math.random().toString(36).substr(2, 9),
           name: roleData.name,
-          description: roleData.description,
           permissions: roleData.permissions,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
+          company_uuid: null,
+          role_uuid: '',
         };
         resolve(role);
       }, 1000);
@@ -181,13 +195,6 @@ const userManagementSlice = createSlice({
     },
     deleteUser: (state, action: PayloadAction<string>) => {
       state.users = state.users.filter(user => user.id !== action.payload);
-    },
-    updateRolePermissions: (state, action: PayloadAction<{ roleId: string; permissions: Permission[] }>) => {
-      const role = state.roles.find(r => r.id === action.payload.roleId);
-      if (role) {
-        role.permissions = action.payload.permissions;
-        role.updatedAt = new Date().toISOString();
-      }
     },
     cancelInvitation: (state, action: PayloadAction<string>) => {
       state.invitations = state.invitations.filter(invitation => invitation.id !== action.payload);
@@ -239,10 +246,6 @@ const userManagementSlice = createSlice({
         state.loading.roles = true;
         state.error = null;
       })
-      .addCase(createRole.fulfilled, (state, action) => {
-        state.loading.roles = false;
-        state.roles.push(action.payload);
-      })
       .addCase(createRole.rejected, (state) => {
         state.loading.roles = false;
         state.error = 'Failed to create role';
@@ -254,7 +257,6 @@ export const {
   setError,
   updateUserStatus,
   deleteUser,
-  updateRolePermissions,
   cancelInvitation,
 } = userManagementSlice.actions;
 

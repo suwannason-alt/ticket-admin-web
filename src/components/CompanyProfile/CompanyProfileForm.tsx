@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Box,
   Card,
@@ -11,12 +11,6 @@ import {
   Avatar,
   IconButton,
   Alert,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Chip,
-  Paper,
 } from '@mui/material';
 import {
   Edit,
@@ -24,40 +18,19 @@ import {
   Cancel,
   Business,
   LocationOn,
-  Settings as SettingsIcon,
-  Subscriptions,
   PhotoCamera,
 } from '@mui/icons-material';
-import { useAppDispatch, useAppSelector } from '../../lib/hooks';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import {
   fetchCompanyProfile,
-  updateCompanyProfile,
-} from '../../lib/slices/companyProfileSlice';
+} from '@/lib/slices/companyProfileSlice';
+import { useTranslations } from 'next-intl';
 
-const timezones = [
-  'America/New_York',
-  'America/Chicago',
-  'America/Denver',
-  'America/Los_Angeles',
-  'Europe/London',
-  'Europe/Paris',
-  'Asia/Tokyo',
-  'Asia/Shanghai',
-  'Australia/Sydney',
-];
-
-const currencies = ['USD', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD', 'CHF'];
-const dateFormats = ['MM/DD/YYYY', 'DD/MM/YYYY', 'YYYY-MM-DD'];
-const languages = [
-  { code: 'en', name: 'English' },
-  { code: 'es', name: 'Spanish' },
-  { code: 'fr', name: 'French' },
-  { code: 'de', name: 'German' },
-];
 
 export default function CompanyProfileForm() {
+  const t = useTranslations('companyProfile')
   const [isEditing, setIsEditing] = useState(false);
-  const [selectedSection, setSelectedSection] = useState<'basic' | 'address' | 'settings' | 'subscription'>('basic');
+  const [selectedSection, setSelectedSection] = useState<'basic' | 'address'>('basic');
   const [formData, setFormData] = useState<any>({});
 
   const dispatch = useAppDispatch();
@@ -73,14 +46,6 @@ export default function CompanyProfileForm() {
     }
   }, [profile]);
 
-  const handleSave = async () => {
-    try {
-      await dispatch(updateCompanyProfile(formData)).unwrap();
-      setIsEditing(false);
-    } catch (error) {
-      console.error('Failed to update company profile:', error);
-    }
-  };
 
   const handleCancel = () => {
     if (profile) {
@@ -103,24 +68,9 @@ export default function CompanyProfileForm() {
     }));
   };
 
-  const getSubscriptionStatusColor = (status: string) => {
-    switch (status) {
-      case 'active':
-        return 'success';
-      case 'trial':
-        return 'warning';
-      case 'inactive':
-        return 'error';
-      default:
-        return 'default';
-    }
-  };
-
   const sections = [
-    { id: 'basic', label: 'Basic Information', icon: <Business /> },
-    { id: 'address', label: 'Address', icon: <LocationOn /> },
-    { id: 'settings', label: 'Settings', icon: <SettingsIcon /> },
-    { id: 'subscription', label: 'Subscription', icon: <Subscriptions /> },
+    { id: 'basic', label: t('basicInfimation'), icon: <Business /> },
+    { id: 'address', label: t('address'), icon: <LocationOn /> },
   ];
 
   if (!profile || !formData.name) return null;
@@ -130,10 +80,10 @@ export default function CompanyProfileForm() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Box>
           <Typography variant="h4" gutterBottom>
-            Company Profile
+            {t('title')}
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            Manage your company information and settings
+            {t('description')}
           </Typography>
         </Box>
         {!isEditing ? (
@@ -142,7 +92,7 @@ export default function CompanyProfileForm() {
             startIcon={<Edit />}
             onClick={() => setIsEditing(true)}
           >
-            Edit Profile
+            {t('editProfile')}
           </Button>
         ) : (
           <Box sx={{ display: 'flex', gap: 1 }}>
@@ -156,7 +106,7 @@ export default function CompanyProfileForm() {
             <Button
               variant="contained"
               startIcon={<Save />}
-              onClick={handleSave}
+              // onClick={handleSave}
               disabled={loading}
             >
               Save Changes
@@ -177,7 +127,7 @@ export default function CompanyProfileForm() {
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
-                Sections
+                {t('sections')}
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                 {sections.map((section) => (
@@ -205,7 +155,7 @@ export default function CompanyProfileForm() {
                 <Box>
                   <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Business />
-                    Basic Information
+                    {t('basicInfimation')}
                   </Typography>
 
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, mb: 3 }}>
@@ -280,10 +230,10 @@ export default function CompanyProfileForm() {
                 <Box>
                   <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <LocationOn />
-                    Company Address
+                    {t('companyAddress')}
                   </Typography>
 
-                  <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2 }}>
+                  <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2 }} mt={2}>
                     <Box sx={{ gridColumn: '1 / -1' }}>
                       <TextField
                         label="Street Address"
@@ -333,137 +283,6 @@ export default function CompanyProfileForm() {
                 </Box>
               )}
 
-              {/* Settings */}
-              {selectedSection === 'settings' && (
-                <Box>
-                  <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <SettingsIcon />
-                    Company Settings
-                  </Typography>
-
-                  <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2 }}>
-                    <Box>
-                      <FormControl fullWidth disabled={!isEditing}>
-                        <InputLabel>Timezone</InputLabel>
-                        <Select
-                          value={formData.settings?.timezone || ''}
-                          onChange={(e) => handleNestedFieldChange('settings', 'timezone', e.target.value)}
-                          label="Timezone"
-                        >
-                          {timezones.map((tz) => (
-                            <MenuItem key={tz} value={tz}>
-                              {tz}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Box>
-                    <Box>
-                      <FormControl fullWidth disabled={!isEditing}>
-                        <InputLabel>Currency</InputLabel>
-                        <Select
-                          value={formData.settings?.currency || ''}
-                          onChange={(e) => handleNestedFieldChange('settings', 'currency', e.target.value)}
-                          label="Currency"
-                        >
-                          {currencies.map((currency) => (
-                            <MenuItem key={currency} value={currency}>
-                              {currency}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Box>
-                    <Box>
-                      <FormControl fullWidth disabled={!isEditing}>
-                        <InputLabel>Date Format</InputLabel>
-                        <Select
-                          value={formData.settings?.dateFormat || ''}
-                          onChange={(e) => handleNestedFieldChange('settings', 'dateFormat', e.target.value)}
-                          label="Date Format"
-                        >
-                          {dateFormats.map((format) => (
-                            <MenuItem key={format} value={format}>
-                              {format}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Box>
-                    <Box>
-                      <FormControl fullWidth disabled={!isEditing}>
-                        <InputLabel>Language</InputLabel>
-                        <Select
-                          value={formData.settings?.language || ''}
-                          onChange={(e) => handleNestedFieldChange('settings', 'language', e.target.value)}
-                          label="Language"
-                        >
-                          {languages.map((lang) => (
-                            <MenuItem key={lang.code} value={lang.code}>
-                              {lang.name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Box>
-                  </Box>
-                </Box>
-              )}
-
-              {/* Subscription */}
-              {selectedSection === 'subscription' && (
-                <Box>
-                  <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Subscriptions />
-                    Subscription Details
-                  </Typography>
-
-                  <Paper sx={{ p: 3, bgcolor: 'grey.50' }}>
-                    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 3 }}>
-                      <Box>
-                        <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                          Current Plan
-                        </Typography>
-                        <Typography variant="h5" gutterBottom>
-                          {profile.subscription?.plan}
-                        </Typography>
-                        <Chip
-                          label={profile.subscription?.status?.toUpperCase()}
-                          color={getSubscriptionStatusColor(profile.subscription?.status) as any}
-                          sx={{ mb: 2 }}
-                        />
-                      </Box>
-
-                      {profile.subscription?.expiresAt && (
-                        <Box>
-                          <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                            Expires On
-                          </Typography>
-                          <Typography variant="body1">
-                            {new Date(profile.subscription.expiresAt).toLocaleDateString()}
-                          </Typography>
-                        </Box>
-                      )}
-
-                      <Box sx={{ gridColumn: '1 / -1' }}>
-                        <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                          Included Features
-                        </Typography>
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                          {profile.subscription?.features?.map((feature) => (
-                            <Chip
-                              key={feature}
-                              label={feature}
-                              variant="outlined"
-                              size="small"
-                            />
-                          ))}
-                        </Box>
-                      </Box>
-                    </Box>
-                  </Paper>
-                </Box>
-              )}
             </CardContent>
           </Card>
         </Box>

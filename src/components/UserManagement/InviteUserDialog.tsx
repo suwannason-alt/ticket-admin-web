@@ -58,12 +58,6 @@ export default function InviteUserDialog({ open, onClose }: InviteUserDialogProp
     },
   });
 
-  useEffect(() => {
-    if (open && roles.length === 0) {
-      dispatch(fetchRoles());
-    }
-  }, [open, roles.length, dispatch]);
-
   const onSubmit = async (data: FormData) => {
     if (user) {
       try {
@@ -125,16 +119,6 @@ export default function InviteUserDialog({ open, onClose }: InviteUserDialogProp
                   label="Role"
                   disabled={loading.roles}
                 >
-                  {roles.map((role) => (
-                    <MenuItem key={role.id} value={role.id}>
-                      <Box>
-                        <Box sx={{ fontWeight: 600 }}>{role.name}</Box>
-                        <Box sx={{ fontSize: '0.875rem', color: 'text.secondary' }}>
-                          {role.description}
-                        </Box>
-                      </Box>
-                    </MenuItem>
-                  ))}
                 </Select>
                 {errors.roleId && (
                   <Box sx={{ color: 'error.main', fontSize: '0.75rem', mt: 0.5, ml: 2 }}>

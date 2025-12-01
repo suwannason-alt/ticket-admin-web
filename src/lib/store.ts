@@ -3,6 +3,7 @@ import userManagementReducer from './slices/userManagementSlice';
 import companyProfileReducer from './slices/companyProfileSlice';
 import authReducer from './slices/authSlice';
 import envReducer from './slices/envSlice';
+import roleSlice from './slices/roleSlice'
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     companyProfile: companyProfileReducer,
     auth: authReducer,
     env: envReducer,
+    role: roleSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

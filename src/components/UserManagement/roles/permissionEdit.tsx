@@ -1,11 +1,26 @@
 import { Security } from '@mui/icons-material';
 import { Box, Card, CardContent, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { getPermission } from '@/service/role.service';
 
 
 interface IProps {
     selectedRole?: any
 }
 export default function Permission(props: IProps) {
+    const [permission, setPermission] = useState([])
+    useEffect(() => {
+
+        const readPermission = async (uuid: string) => {
+            const results = await getPermission(uuid)
+            console.log(results.data);
+            
+        }
+        if (props.selectedRole) {
+            readPermission(props.selectedRole.uuid)
+        }
+        
+    }, [props.selectedRole])
     return (
         <Box>
             <Card>
@@ -18,7 +33,7 @@ export default function Permission(props: IProps) {
                             </Typography>
 
                             <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                                Configure access permissions for each service and feature
+                                {props.selectedRole.description}
                             </Typography>
                         </Box>
                     ) : (

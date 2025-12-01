@@ -5,7 +5,6 @@ import {
   Box,
   Typography,
   Button,
-  Alert,
   Tabs,
   Tab,
 } from '@mui/material';
@@ -13,26 +12,32 @@ import {
   Add,
 } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import {
-  fetchRoles,
-  Role,
-} from '@/lib/slices/userManagementSlice';
 import { useTranslations } from 'next-intl';
 import CreateRole from './create';
 import RoleLayout from './layout';
+import Preload from '../../Global/preload';
+import { readSystemRole } from '@/lib/slices/roleSlice';
 
 export default function RolesAndPermissions() {
   const t = useTranslations('roleAndPermission')
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
-  const [selectedRole, setSelectedRole] = useState<Role | null>(null);
+  const [selectedRole, setSelectedRole] = useState(null);
   const [tabVale, setTabValue] = useState(0)
 
   const dispatch = useAppDispatch();
-  const { roles, error } = useAppSelector((state) => state.userManagement);
+  const { system } = useAppSelector((state) => state.role);
+  const [systemRoleCount, setSystemRoleCount] = useState<number>(0)
 
   useEffect(() => {
-    dispatch(fetchRoles());
-  }, [dispatch]);
+    if (system.length === 0) {
+      dispatch(readSystemRole())
+    }
+  }, []);
+
+  useEffect(() => {
+    setSystemRoleCount(system.length)
+  }, [system])
+
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue)
@@ -58,19 +63,26 @@ export default function RolesAndPermissions() {
         </Button>
       </Box>
 
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
-
       <Tabs value={tabVale} onChange={handleTabChange}>
         <Tab label={'System role'} />
-        <Tab label={'Custom role'} />
+        <Tab label={'Custom role'} disabled />
       </Tabs>
 
-      <div hidden={tabVale !== 0} style={{ marginTop: '15px'}}>
-        <RoleLayout roles={roles} selectedRole={selectedRole} setSelectedRole={setSelectedRole} count={2} />
+      <div hidden={tabVale !== 0} style={{ marginTop: '15px' }}>
+        <Preload state={system} render={
+          <RoleLayout
+            roles={system}
+            selectedRole={selectedRole}
+            setSelectedRole={setSelectedRole}
+            count={systemRoleCount} />
+
+        }
+          skeleton={{
+            width: 100,
+            height: 100,
+          }}
+        />
+
       </div>
 
       <div hidden={tabVale !== 1}>

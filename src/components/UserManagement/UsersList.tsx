@@ -8,7 +8,6 @@ import {
   Alert,
 } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../lib/hooks';
-import { fetchUsers, User } from '../../lib/slices/userManagementSlice';
 import InviteUserDialog from './InviteUserDialog';
 
 import { useTranslations } from 'next-intl';
@@ -21,9 +20,6 @@ export default function UsersList() {
   const dispatch = useAppDispatch();
   const { users, loading, error } = useAppSelector((state) => state.userManagement);
 
-  useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch]);
 
 
   return (

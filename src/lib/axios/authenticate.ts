@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import getENV from '@/app/env';
 import Cookies from 'js-cookie';
 
@@ -34,7 +34,7 @@ async function loadEnvOnce() {
 }
 // ------------------------------------
 
-let cachedApiInstance: any = null;
+let cachedApiInstance: AxiosInstance;
 
 export default async function authenticated() {
     if (cachedApiInstance) {

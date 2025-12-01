@@ -38,5 +38,14 @@
         "createDescription": "Description",
         "createDescriptionPlace": "Describe the role's responsibilities and access level",
         "cancel": "Cancel"
+    },
+    "companyProfile": {
+        "title": "Company Profile",
+        "description": "Manage your company information",
+        "sections": "Sections",
+        "basicInfimation": "Basic Information",
+        "address": "Address",
+        "companyAddress": "Company Address",
+        "editProfile": "Edit Profile"
     }
 }
