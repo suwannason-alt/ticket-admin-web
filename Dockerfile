@@ -1,13 +1,13 @@
 FROM node:22.15.1 AS deps
 
-RUN mkdr -p /app
+RUN mkdir -p /app
 
 WORKDIR /app
 
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
-FROM deps AS builder
+FROM deps AS build
 
 WORKDIR /app
 
