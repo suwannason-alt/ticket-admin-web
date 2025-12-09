@@ -42,6 +42,8 @@ import CompanySwitcherDialog from './CompanySwitcher/CompanySwitcherDialog';
 import NotificationDisplay from './Notification/notification';
 import { useTranslations, useLocale } from 'next-intl';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation'
+import { setNav } from '../lib/slices/navSlice';
 
 
 const drawerWidth = 280;
@@ -60,10 +62,11 @@ interface NavItem {
   badge?: number;
 }
 
-export default function DashboardLayout({ children, onNavigate }: DashboardLayoutProps) {
+export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const t = useTranslations('nav');
   const locale = useLocale();
+  const router = useRouter()
 
   const navigationItems: NavItem[] = [
     {
@@ -123,45 +126,28 @@ export default function DashboardLayout({ children, onNavigate }: DashboardLayou
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [notificationAnchorEl, setNotificationAnchorEl] = useState<null | HTMLElement>(null);
   const [languageAnchorEl, setLanguageAnchorEl] = useState<null | HTMLElement>(null);
-  const [activeItem, setActiveItem] = useState('dashboard');
-  const [currentTitle, setCurrentTitle] = useState('Dashboard');
   const [companySwitcherOpen, setCompanySwitcherOpen] = useState(false);
 
+  const { title, path, id } = useAppSelector((state) => state.nav)
+
   const dispatch = useAppDispatch();
-  const { user, currentCompany, isAuthenticated } = useAppSelector((state) => state.auth);
+  const { user, currentCompany } = useAppSelector((state) => state.auth);
 
-  // useEffect(() => {
-  //   if (!isAuthenticated) {
-  //     dispatch(getCurrentUser());
-  //   }
-  // }, [dispatch, isAuthenticated]);
-
+  useEffect(() => {
+    console.log({ path, id });
+    
+  }, [dispatch])
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const handleExpandClick = (itemId: string) => {
-    const newExpanded = new Set(expandedItems);
-    if (newExpanded.has(itemId)) {
-      newExpanded.delete(itemId);
-    } else {
-      newExpanded.add(itemId);
-    }
-    setExpandedItems(newExpanded);
-  };
-
   const handleNavItemClick = (item: NavItem) => {
-    if (item.children && item.children.length > 0) {
-      handleExpandClick(item.id);
-    } else {
-      setActiveItem(item.id);
-      setCurrentTitle(item.label);
-      if (onNavigate) {
-        onNavigate(item.id, item.label);
-      }
-      // Close mobile drawer when item is selected
+    if (item.path) {
+      router.push(item.path)
+      dispatch(setNav({ title: item.label, path: item.id, id: item.id }))
       setMobileOpen(false);
     }
+
   };
 
   const handleProfileMenuClose = () => {
@@ -205,7 +191,7 @@ export default function DashboardLayout({ children, onNavigate }: DashboardLayou
   const renderNavItem = (item: NavItem, level = 0) => {
     const hasChildren = item.children && item.children.length > 0;
     const isExpanded = expandedItems.has(item.id);
-    const isActive = activeItem === item.id;
+    const isActive = id === item.id;
     return (
       <React.Fragment key={item.id}>
         <ListItem disablePadding sx={{ pl: level * 2 }}>
@@ -315,7 +301,7 @@ export default function DashboardLayout({ children, onNavigate }: DashboardLayou
             </IconButton>
 
             <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-              {currentTitle}
+              {title}
             </Typography>
 
             <IconButton color={'info'} sx={{ mr: 1 }} onClick={handleLanguageClick}>

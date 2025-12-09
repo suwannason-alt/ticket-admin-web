@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 
 const TOKEN_COOKIE_KEY = 'token';
 const REFRESH_COKIE_KEY = 'refreshToken'
-const REFRESH_TOKEN_PATH = 'credential/refresh'
+const REFRESH_TOKEN_PATH = '/api/v1/credential/refresh'
 
 let cachedEnv: any = null;
 let envPromise: any = null;
@@ -41,14 +41,14 @@ export default async function authenticated() {
         return cachedApiInstance;
     }
 
-    const env = await loadEnvOnce(); 
+    const env = await loadEnvOnce();
     const { userAPI, credentialAPI } = env;
 
     const api = axios.create()
 
     api.interceptors.request.use(async (config) => {
-        config.baseURL = userAPI; 
-        
+        config.baseURL = userAPI;
+
         const token = Cookies.get(TOKEN_COOKIE_KEY);
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
@@ -73,7 +73,7 @@ export default async function authenticated() {
             Cookies.remove(TOKEN_COOKIE_KEY);
             Cookies.remove(REFRESH_COKIE_KEY);
             if (typeof window !== 'undefined') {
-                 window.location.href = '/'
+                window.location.href = '/'
             }
             throw error;
         }
@@ -87,21 +87,22 @@ export default async function authenticated() {
         // console.log(error.response?.status === 401 && originalRequest.url.indexOf(REFRESH_TOKEN_PATH) !== -1);
         console.log({ originalRequest: originalRequest.url, REFRESH_TOKEN_PATH, idxOf: originalRequest.url.indexOf(REFRESH_TOKEN_PATH) });
         console.log(error.response?.status);
-        
-        
-        if (error.response?.status === 401 && originalRequest.url.indexOf(REFRESH_TOKEN_PATH) === -1) {
-            console.log('call refresh')
-            // const newAccessTokenData = await refreshToken();
-            
-            // if (newAccessTokenData?.data?.token) {
-            //     const newToken = newAccessTokenData.data.token;
-                
-            //     Cookies.set(TOKEN_COOKIE_KEY, newToken);
-            //     Cookies.set(REFRESH_COKIE_KEY, newAccessTokenData.data.refreshToken);
-            //     originalRequest.headers['Authorization'] = 'Bearer ' + newToken;
-                
-            //     return api(originalRequest)
-            // }
+
+
+        if (error.response?.status === 401 && originalRequest.url !== REFRESH_TOKEN_PATH) {
+
+            const newAccessTokenData = await refreshToken();
+
+            if (newAccessTokenData?.data?.token) {
+                const newToken = newAccessTokenData.data.token;
+
+                Cookies.set(TOKEN_COOKIE_KEY, newToken);
+                Cookies.set(REFRESH_COKIE_KEY, newAccessTokenData.data.refreshToken);
+
+                originalRequest.headers['Authorization'] = 'Bearer ' + newToken;
+
+                return api(originalRequest)
+            }
         }
 
         return Promise.reject(error)

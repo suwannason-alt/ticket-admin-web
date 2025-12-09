@@ -2,7 +2,7 @@
     "nav": {
         "dashboard": "แดชบอร์ด",
         "usermanagement": "จัดการผู้ใช้งาน",
-        "users": "ผู้ใช้งาน",
+        "users": "ผู้ใช้งานและกลุ่ม",
         "roleAndPermission": "กำหนดสิทธิ์การเข้าถึง",
         "invitations": "เชิญผู้ใช้งาน",
         "category": "หมวดหมู่",

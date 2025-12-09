@@ -2,7 +2,7 @@
     "nav": {
         "dashboard": "Dashboard",
         "usermanagement": "User management",
-        "users": "Users",
+        "users": "Users & groups",
         "roleAndPermission": "Role & Permissions",
         "invitations": "Invitations",
         "category": "Category",

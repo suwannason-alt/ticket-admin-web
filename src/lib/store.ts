@@ -4,6 +4,7 @@ import companyProfileReducer from './slices/companyProfileSlice';
 import authReducer from './slices/authSlice';
 import envReducer from './slices/envSlice';
 import roleSlice from './slices/roleSlice'
+import navSlice from './slices/navSlice'
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     auth: authReducer,
     env: envReducer,
     role: roleSlice,
+    nav: navSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
