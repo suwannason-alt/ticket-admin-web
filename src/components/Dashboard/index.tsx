@@ -21,9 +21,9 @@ import {
   Schedule,
 } from '@mui/icons-material';
 import React, { JSX, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../lib/hooks';
-import { fetchCompanyProfile } from '../../lib/slices/companyProfileSlice';
-import Preload from '../Global/preload';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import { fetchCompanyProfile } from '@/lib/slices/companyProfileSlice';
+import Preload from '../../Global/preload';
 
 export default function DashboardView() {
   const dispatch = useAppDispatch();

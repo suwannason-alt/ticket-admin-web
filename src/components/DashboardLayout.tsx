@@ -36,14 +36,14 @@ import {
   Category,
   LanguageOutlined,
 } from '@mui/icons-material';
-import { useAppDispatch, useAppSelector } from '../lib/hooks';
-import { getCurrentUser, logout } from '../lib/slices/authSlice';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import { getCurrentUser, logout } from '@/lib/slices/authSlice';
 import CompanySwitcherDialog from './CompanySwitcher/CompanySwitcherDialog';
 import NotificationDisplay from './Notification/notification';
 import { useTranslations, useLocale } from 'next-intl';
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/navigation'
-import { setNav } from '../lib/slices/navSlice';
+import { useRouter, usePathname } from 'next/navigation'
+import { setNav } from '@/lib/slices/navSlice';
 
 
 const drawerWidth = 280;
@@ -67,6 +67,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const t = useTranslations('nav');
   const locale = useLocale();
   const router = useRouter()
+  const pathname = usePathname();
+
 
   const navigationItems: NavItem[] = [
     {
@@ -133,13 +135,30 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const dispatch = useAppDispatch();
   const { user, currentCompany } = useAppSelector((state) => state.auth);
 
-  useEffect(() => {
-    console.log({ path, id });
-    
-  }, [dispatch])
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  useEffect(() => {
+    const findAndSetNav = (items: NavItem[]): boolean => {
+      for (const item of items) {
+        if (item.path === pathname) {
+          dispatch(setNav({ title: item.label, path: item.id, id: item.id }));
+          if (item.children) {
+            setExpandedItems(prev => new Set(prev).add(item.id));
+          }
+          return true;
+        }
+        if (item.children && findAndSetNav(item.children)) {
+          setExpandedItems(prev => new Set(prev).add(item.id));
+          return true;
+        }
+      }
+      return false;
+    };
+
+    findAndSetNav(navigationItems);
+  }, [pathname])
 
   const handleNavItemClick = (item: NavItem) => {
     if (item.path) {

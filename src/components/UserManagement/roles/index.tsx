@@ -15,7 +15,7 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { useTranslations } from 'next-intl';
 import CreateRole from './create';
 import RoleLayout from './layout';
-import Preload from '../../Global/preload';
+import Preload from '../../../Global/preload';
 import { readSystemRole } from '@/lib/slices/roleSlice';
 
 export default function RolesAndPermissions() {

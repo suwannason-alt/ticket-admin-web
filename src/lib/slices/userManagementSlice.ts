@@ -34,6 +34,12 @@ export interface User {
   invitedBy?: string;
 }
 
+export interface Group {
+  uuid: string;
+  name: string;
+  description: string;
+}
+
 export interface UserInvitation {
   id: string;
   email: string;
@@ -46,6 +52,7 @@ export interface UserInvitation {
 
 interface UserManagementState {
   users: User[];
+  groups: { data: Group[], rowCount: number; };
   roles: Role;
   permissions: Permission[];
   invitations: UserInvitation[];
@@ -61,6 +68,7 @@ interface UserManagementState {
 
 const initialState: UserManagementState = {
   users: [],
+  groups: { data: [], rowCount: 0 },
   roles: {
     user_uuid: '',
     name: '',
@@ -199,6 +207,10 @@ const userManagementSlice = createSlice({
     cancelInvitation: (state, action: PayloadAction<string>) => {
       state.invitations = state.invitations.filter(invitation => invitation.id !== action.payload);
     },
+    setCompanyGroups: (state, action) => {
+      state.groups.data = action.payload.data
+      state.groups.rowCount = action.payload.rowCount;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -258,6 +270,7 @@ export const {
   updateUserStatus,
   deleteUser,
   cancelInvitation,
+  setCompanyGroups
 } = userManagementSlice.actions;
 
 export default userManagementSlice.reducer;

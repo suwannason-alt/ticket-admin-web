@@ -13,7 +13,7 @@ export async function login(username: string, password: string) {
         return response;
 
     } catch (error: any) {
-        return error.response
+        throw error.response
     }
 }
 
@@ -23,7 +23,7 @@ export async function profile() {
         const response = await instance.get(`/api/v1/users/profile`)
         return response.data;
     } catch (error: any) {
-        return error.response || error.message
+        throw error.response || error.message
     }
 }
 
@@ -33,7 +33,7 @@ export async function permissions() {
         const response = await instance.get(`/api/v1/permissions/user`)
         return response.data;
     } catch (error: any) {
-        return error.response || error.message
+        throw error.response || error.message
     }
 }
 
@@ -44,5 +44,35 @@ export async function company() {
         return response.data;
     } catch (error: any) {
         return error.response || error.message
+    }
+}
+
+export async function createGroup(name: string, description: string) {
+    try {
+        const instance = await authenticated()
+        const response = await instance.post(`/api/v1/groups`, { name, description });
+        return response.data;
+    } catch (error: any) {
+        throw error.response || error.message
+    }
+}
+
+export async function listGroup(page: number, limit: number) {
+    try {
+        const instance = await authenticated()
+        const response = await instance.get(`/api/v1/groups?page=${page}&&limit=${limit}`)
+        return response.data;
+    } catch (error: any) {
+        throw error.response || error.message
+    }
+}
+
+export async function listUser(page: number, limit: number) {
+        try {
+        const instance = await authenticated()
+        const response = await instance.get(`/api/v1/users?page=${page}&&limit=${limit}`)
+        return response.data;
+    } catch (error: any) {
+        throw error.response || error.message
     }
 }

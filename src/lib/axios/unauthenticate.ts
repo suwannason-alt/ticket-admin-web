@@ -1,5 +1,5 @@
 import axios from 'axios';
-import getENV from '../../app/env';
+import getENV from '@/app/env';
 
 let cachedUnauthenInstance: any = null;
 let envPromise: any = null;

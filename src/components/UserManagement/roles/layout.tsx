@@ -2,7 +2,7 @@ import { Group } from '@mui/icons-material';
 import { Box, Card, CardContent, Fade, Typography } from '@mui/material';
 import { Dispatch, SetStateAction, useState } from 'react';
 import Permission from './permissionEdit';
-import PaginationComponent from '../../Global/pagination';
+import PaginationComponent from '../../../Global/pagination';
 
 interface IProps {
     roles: any[]

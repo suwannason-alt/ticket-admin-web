@@ -25,8 +25,8 @@ export default function DataTable(props: IProps) {
   }, [onRowSelect, rowSelection]);
 
   // Calculate positions for sticky columns
-  const leftStickyColumns = 2; // Number of columns you want to freeze on the left
-  const rightStickyColumns = 2; // Number of columns you want to freeze on the right
+  const leftStickyColumns = 0; // Number of columns you want to freeze on the left
+  const rightStickyColumns = 0; // Number of columns you want to freeze on the right
 
   const columnsWithStickyStyle = columns.map((col: any, index: number) => {
     if (index < leftStickyColumns) {
@@ -56,23 +56,31 @@ export default function DataTable(props: IProps) {
   });
 
   return (
-    <MaterialReactTable
-      columns={columnsWithStickyStyle}
-      
-      data={data}
-      enablePagination
-      manualPagination
-      enableTopToolbar={false}
-      renderBottomToolbar={
-        <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '5px' }} className='mt-2'>
-          <PaginationComponent  currentPage={props.currentPage} onPageChange={onPageChange} pageCount={pageCount} />
+    <>
+      {data.length === 0 && props.loading === false ? (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '40px', minHeight: '300px' }}>
+          <p style={{ fontSize: '16px', color: '#666' }}>No records to display</p>
         </div>
-      }
-      enableStickyHeader
-      enableSorting={false}
-      enableRowSelection={Boolean(onRowSelect)}
-      onRowSelectionChange={setRowSelection}
-      state={{ rowSelection, isLoading: props.loading }}
-    />
+      ) : (
+        <MaterialReactTable
+          columns={columnsWithStickyStyle}
+
+          data={data}
+          enablePagination
+          manualPagination
+          enableTopToolbar={false}
+          renderBottomToolbar={
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '5px' }} className='mt-2'>
+              <PaginationComponent currentPage={props.currentPage} onPageChange={onPageChange} pageCount={pageCount} />
+            </div>
+          }
+          enableStickyHeader
+          enableSorting={false}
+          enableRowSelection={Boolean(onRowSelect)}
+          onRowSelectionChange={setRowSelection}
+          state={{ rowSelection, isLoading: props.loading }}
+        />
+      )}
+    </>
   );
 }

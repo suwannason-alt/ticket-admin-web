@@ -22,8 +22,8 @@ import {
   CheckCircle,
   Business,
 } from '@mui/icons-material';
-import { useAppDispatch, useAppSelector } from '../../lib/hooks';
-import { switchCompany, Company } from '../../lib/slices/authSlice';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import { switchCompany, Company } from '@/lib/slices/authSlice';
 
 interface CompanySwitcherDialogProps {
   open: boolean;

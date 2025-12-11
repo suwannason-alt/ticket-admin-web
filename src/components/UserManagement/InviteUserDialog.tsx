@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useEffect } from 'react';
 import {
   Dialog,
   DialogActions,
@@ -19,8 +18,8 @@ import {
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useAppDispatch, useAppSelector } from '../../lib/hooks';
-import { inviteUser, fetchRoles } from '../../lib/slices/userManagementSlice';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import { inviteUser, fetchRoles } from '@/lib/slices/userManagementSlice';
 import { useTranslations } from 'next-intl';
 
 interface InviteUserDialogProps {

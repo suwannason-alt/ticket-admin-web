@@ -5,7 +5,7 @@ import { useState } from 'react';
 import CreateCategory from './create';
 import { useTranslations } from 'next-intl';
 import { Create } from '@mui/icons-material';
-import DataTable from '../Global/data-table';
+import DataTable from '../../Global/data-table';
 
 export default function CategoryHome() {
 

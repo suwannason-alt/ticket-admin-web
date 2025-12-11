@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Providers from '../components/Providers/Providers';
+import Providers from '@/components/Providers/Providers';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { NextIntlClientProvider } from 'next-intl';
 import { EnvScript } from '@daniel-rose/envex/script';
 import { EnvexProvider } from '@daniel-rose/envex';
 import { getPublicEnv } from '@daniel-rose/envex/server';
-import TokenProvider from '../components/Providers/TokenPrivider';
-import EnvProvider from '../components/Providers/envProvider';
+import TokenProvider from '@/components/Providers/TokenPrivider';
+import EnvProvider from '@/components/Providers/envProvider';
 
 const inter = Inter({ subsets: ["latin"] });
 
