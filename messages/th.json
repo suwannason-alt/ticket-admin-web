@@ -1,4 +1,10 @@
 {
+    "common": {
+        "save": "บันทึก",
+        "close": "ปิด",
+        "cancel": "ยกเลิก",
+        "submit": "ยืนยัน"
+    },
     "nav": {
         "dashboard": "แดชบอร์ด",
         "usermanagement": "จัดการผู้ใช้งาน",
@@ -21,6 +27,8 @@
     "userlist": {
         "users": "ผู้ใช้งาน",
         "group": "กลุ่ม",
+        "groupMember": "สมาชิกในกลุ่ม",
+        "manageUserGroup": "จัดการสมาชิกในกลุ่ม",
         "description": "จัดการบัญชีและสิทธิ์ผู้ใช้งาน",
         "invite": "เชิญผู้ใช้งาน",
         "inviteNew": "เชิญผู้ใช้ใหม่",
@@ -31,8 +39,17 @@
         "delete": "ลบ",
         "edit": "แก้ไข",
         "createGroup": "สร้างกลุ่ม",
+        "wantToDeleteGroup": "ยืนยันการลบกลุ่ม",
+        "deleteGoupDescription": "กลุ่มจะถูกลบและผู้ใช้งานในกลุ่มนี้จะออกจากกลุ่ม",
         "labelTextFielGroupname": "กำหนดชื่อกลุ่ม",
-        "labelTextFielGroupdescription": "กำหนดคำอธิบาย"
+        "labelTextFielGroupdescription": "กำหนดคำอธิบาย",
+        "tableHeadEmail": "อีเมลล์",
+        "tableHeadDisplayname": "ชื่อที่แสดง",
+        "tableHeadRole": "สิทธิ์",
+        "tableHeadGroup": "กลุ่ม",
+        "tableHeadDescription": "คำอธิบาย",
+        "tableHeadGroupname": "ชื่อกลุ่ม",
+        "tableHeadAction": "เมนู"
     },
     "roleAndPermission": {
         "title": "หน้าที่และสิทธิ์การใช้งาน",

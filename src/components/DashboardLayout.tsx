@@ -262,7 +262,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   };
 
   const drawer = (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }} aria-hidden={'false'}>
       <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
         <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 600 }}>
           Admin web
@@ -272,14 +272,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </Typography>
       </Box>
 
-      <Box sx={{ flex: 1, overflow: 'auto' }}>
+      <Box sx={{ flex: 1, overflow: 'auto' }} aria-hidden={'false'}>
         <List sx={{ pt: 1 }}>
           {navigationItems.map((item) => renderNavItem(item))}
         </List>
       </Box>
 
       {user && (
-        <Box sx={{ p: 2, borderTop: 1, borderColor: 'divider' }}>
+        <Box sx={{ p: 2, borderTop: 1, borderColor: 'divider' }} aria-hidden={'false'}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main' }}>
               S
@@ -300,7 +300,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <>
-      <Box sx={{ display: 'flex', height: '100vh' }}>
+      <Box sx={{ display: 'flex', height: '100vh' }} aria-hidden={'false'}>
         <AppBar
           position="fixed"
           sx={{
@@ -312,6 +312,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <IconButton
               color="inherit"
               aria-label="open drawer"
+              aria-hidden={'false'}
               edge="start"
               onClick={handleDrawerToggle}
               sx={{ mr: 2, display: { md: 'none' } }}
@@ -415,6 +416,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </Drawer>
           <Drawer
             variant="permanent"
+            aria-hidden={'false'}
             sx={{
               display: { xs: 'none', md: 'block' },
               '& .MuiDrawer-paper': {

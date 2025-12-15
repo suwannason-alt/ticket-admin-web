@@ -78,11 +78,11 @@ export default function UsersList() {
         <div hidden={tabVale !== 0}>
           <DataTable
             columns={[
-              { accessorKey: 'email', header: 'Email', size: 40 },
-              { accessorKey: 'displayName', header: 'Display name' },
-              { accessorKey: 'roleName', header: 'Role' },
+              { accessorKey: 'email', header: t('tableHeadEmail'), size: 40 },
+              { accessorKey: 'displayName', header: t('tableHeadDisplayname') },
+              { accessorKey: 'roleName', header: t('tableHeadRole') },
               {
-                accessorKey: 'groupName', header: 'Group', Cell: ({ row }) => {
+                accessorKey: 'groupName', header: t('tableHeadGroup'), Cell: ({ row }) => {
                   const rowData = row.original
                   const arrGroups = rowData.groupName.split(',')
                   return (
@@ -101,7 +101,7 @@ export default function UsersList() {
                 }
               },
               {
-                accessorKey: 'action', header: 'Action', Cell: ({ row }) => {
+                accessorKey: 'action', header: t('tableHeadAction'), Cell: ({ row }) => {
                   return (
                     <>
                     <Tooltip title={t('delete')}>

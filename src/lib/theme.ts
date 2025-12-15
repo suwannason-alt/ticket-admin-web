@@ -86,7 +86,15 @@ export const theme = createTheme({
     borderRadius: 4,
   },
   components: {
+    MuiIconButton: {
+      defaultProps: {
+        autoFocus: false
+      }
+    },
     MuiButton: {
+      defaultProps: {
+        autoFocus: false,
+      },
       styleOverrides: {
         root: {
           borderRadius: '2px',

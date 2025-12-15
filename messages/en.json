@@ -1,4 +1,10 @@
 {
+    "common": {
+        "save": "Save",
+        "close": "Close",
+        "cancel": "Cancel",
+        "submit": "Submit"
+    },
     "nav": {
         "dashboard": "Dashboard",
         "usermanagement": "User management",
@@ -21,6 +27,8 @@
     "userlist" : {
         "users": "Users",
         "group": "Groups",
+        "groupMember": "Group members",
+        "manageUserGroup": "Manage user group",
         "description": "Manage user accounts and permissions",
         "invite": "Invite User",
         "inviteNew": "Invite New User",
@@ -29,10 +37,19 @@
         "sendInvite": "Send invite",
         "cancel": "Cancel",
         "delete": "Delete",
+        "wantToDeleteGroup": "Are you sure to delete group?",
+        "deleteGoupDescription": "Group will be delete and user will leave this group.",
         "edit": "Edit",
         "createGroup": "Create group",
         "labelTextFielGroupname": "Group name",
-        "labelTextFielGroupdescription": "Group description"
+        "labelTextFielGroupdescription": "Group description",
+        "tableHeadEmail": "Email",
+        "tableHeadDisplayname": "Display name",
+        "tableHeadRole": "Role",
+        "tableHeadGroup": "Group",
+        "tableHeadDescription": "Description",
+        "tableHeadGroupname": "Name",
+        "tableHeadAction": "Action"
     },
     "roleAndPermission": {
         "title": "Roles & Permissions",

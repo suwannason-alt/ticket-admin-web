@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 
 import { TransitionProps } from '@mui/material/transitions';
+import { useTranslations } from 'next-intl';
 import React, { Dispatch, memo, SetStateAction } from 'react';
 
 interface IProps {
@@ -29,6 +30,7 @@ const Transition = React.forwardRef(function Transition(
 })
 
 export default memo(function DialogTemplate(props: IProps) {
+    const t = useTranslations('common')
 
     return (
         <Dialog
@@ -50,7 +52,7 @@ export default memo(function DialogTemplate(props: IProps) {
                     color={'error'}
                     variant={'contained'}
                 >
-                    Close
+                    {t('cancel')}
                 </Button>
             </DialogActions>
         </Dialog>

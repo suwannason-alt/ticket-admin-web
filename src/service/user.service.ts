@@ -67,10 +67,44 @@ export async function listGroup(page: number, limit: number) {
     }
 }
 
+export async function listGroupMember(uuid: string, page: number, limit: number) {
+    try {
+        const instance = await authenticated()
+        const response = await instance.get(`/api/v1/groups/member/${uuid}?page=${page}&&limit=${limit}`);
+        return response.data;
+    } catch (error: any) {
+        throw error.response || error.message
+    }
+}
+
+export async function listMemberNotInGroup(text: string, uuid: string, page: number, limit: number) {
+    try {
+        const body = {};
+        if (text && text !== '') {
+            Object.assign(body, { search: text });
+        }
+        const instance = await authenticated()
+        const response = await instance.patch(`/api/v1/groups/not-member/${uuid}?page=${page}&&limit=${limit}`, body);
+        return response.data;
+    } catch (error: any) {
+        throw error.response || error.message
+    }
+}
+
+export async function deleteGroup(uuid: string) {
+    try {
+        const instance = await authenticated()
+        const response = await instance.delete(`/api/v1/groups/${uuid}`);
+        return response.data;
+    } catch (error: any) {
+        throw error.response || error.message
+    }
+}
+
 export async function listUser(page: number, limit: number) {
         try {
         const instance = await authenticated()
-        const response = await instance.get(`/api/v1/users?page=${page}&&limit=${limit}`)
+        const response = await instance.patch(`/api/v1/users?page=${page}&&limit=${limit}`)
         return response.data;
     } catch (error: any) {
         throw error.response || error.message
