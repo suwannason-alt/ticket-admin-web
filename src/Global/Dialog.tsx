@@ -17,6 +17,7 @@ interface IProps {
     setOpen: Dispatch<SetStateAction<boolean>>;
     title: string;
     content: React.ReactNode;
+    fullScreen?: boolean;
     submitFunction?: () => void
 }
 
@@ -37,8 +38,14 @@ export default memo(function DialogTemplate(props: IProps) {
             open={props.open}
             onClose={() => props.setOpen(false)}
             fullWidth
+            fullScreen={props?.fullScreen}
             slots={{
                 transition: Transition
+            }}
+            slotProps={{
+                paper: {
+                    sx: { maxWidth: 1100 }
+                }
             }}
         >
             <DialogTitle>{props.title}</DialogTitle>

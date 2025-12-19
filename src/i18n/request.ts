@@ -8,4 +8,3 @@ const locale = store.get('locale')?.value || 'en';
     messages: (await import(`../../messages/${locale}.json`)).default
   };
 });
-

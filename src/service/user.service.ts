@@ -91,6 +91,16 @@ export async function listMemberNotInGroup(text: string, uuid: string, page: num
     }
 }
 
+export async function addMemberToGroup(groupUUID: string, userUUIDs: string[]) {
+    try {
+        const instance = await authenticated()
+        const response = await instance.post(`/api/v1/groups/${groupUUID}/add-user`, { users: userUUIDs });
+        return response.data;
+    } catch (error: any) {
+        throw error.response || error.message
+    }
+}
+
 export async function deleteGroup(uuid: string) {
     try {
         const instance = await authenticated()

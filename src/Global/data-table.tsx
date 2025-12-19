@@ -55,16 +55,13 @@ export default function DataTable(props: IProps) {
     return col;
   });
 
+  if (props.loading) return <div style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>;
+
   return (
     <>
-      {data.length === 0 && props.loading === false ? (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '40px', minHeight: '300px' }}>
-          <p style={{ fontSize: '16px', color: '#666' }}>No records to display</p>
-        </div>
-      ) : (
+
         <MaterialReactTable
           columns={columnsWithStickyStyle}
-
           data={data}
           enablePagination
           manualPagination
@@ -80,7 +77,6 @@ export default function DataTable(props: IProps) {
           onRowSelectionChange={setRowSelection}
           state={{ rowSelection, isLoading: props.loading }}
         />
-      )}
     </>
   );
 }

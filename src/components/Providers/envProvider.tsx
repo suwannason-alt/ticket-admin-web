@@ -1,6 +1,6 @@
 
 'use client'
-import { useAppSelector, useAppDispatch } from '@/lib/hooks';
+import { useAppDispatch } from '@/lib/hooks';
 import { useEffect } from 'react';
 import { readENV } from '@/lib/slices/envSlice';
 

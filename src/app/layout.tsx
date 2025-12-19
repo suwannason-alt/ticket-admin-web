@@ -14,6 +14,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Admin",
   description: "Admin for manage ticket system.",
+  // metadataBase: new URL('/admin', 'http://localhost:3000'),
 };
 
 export default async function RootLayout({

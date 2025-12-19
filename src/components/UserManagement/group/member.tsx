@@ -1,9 +1,8 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import DialogTemplate from '@/Global/Dialog';
 import { useTranslations } from 'next-intl';
-import { listGroupMember, listMemberNotInGroup, listUser } from '@/service/user.service';
-import { useAppSelector } from '@/lib/hooks';
-import { Autocomplete, Box, TextField } from '@mui/material';
+import { addMemberToGroup, listGroupMember, listMemberNotInGroup } from '@/service/user.service';
+import { Autocomplete, Box, Button, TextField } from '@mui/material';
 import DataTable from '@/Global/data-table';
 
 interface IProps {
@@ -16,28 +15,49 @@ export default function GroupMember(props: IProps) {
 
     const [page, setPage] = useState<number>(1);
     const [userPage, setUserPage] = useState<number>(1);
-    const [data, setData] = useState([]);
     const [userData, setUserData] = useState([]);
+
+    const [data, setData] = useState([]);
     const [rowCount, setRowCount] = useState<number>(1);
+
     const [rowUserCount, setRowUserCount] = useState<number>(1);
-    const [userDataOriginal, setUserDataOriginal] = useState<any>([]);
     const [inputValue, setInputValue] = useState<string>('');
     const [selectedUsers, setSelectedUsers] = useState<any[]>([]);
+    const [uuids, setUuids] = useState<string[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
 
+    const fetchUsers = async () => {
+        try {
+            const results = await listMemberNotInGroup(inputValue, props.groupUUID, userPage, 10);
+            setUserData(results.data.data)
+            setRowUserCount(results.data.rowCount)
+        } catch (error) {
+
+        }
+    }
+
+    const addMembers = async () => {
+        try {
+            await addMemberToGroup(props.groupUUID, uuids);
+        } catch (error) {
+
+        }
+    }
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const results = await listMemberNotInGroup(inputValue, props.groupUUID, userPage, 10);
-                setUserData(results.data)
-                setRowUserCount(results.rowCount)
-            } catch (error) {
-
-            }
-        }
-
         fetchUsers();
     }, [userPage]);
+
+    useEffect(() => {
+        if (selectedUsers.length > 0) {
+            const uuids = selectedUsers.map((u) => u.uuid)
+            setUuids(uuids);
+        } else {
+            setUuids([]);
+        }
+
+
+    }, [selectedUsers,])
 
     useEffect(() => {
 
@@ -46,11 +66,14 @@ export default function GroupMember(props: IProps) {
                 const results = await listGroupMember(props.groupUUID, page, 10);
                 setRowCount(results.data.rowCount);
                 setData(results.data.data)
+                setLoading(false);
+
             } catch (error) {
                 console.log(error);
 
             }
         }
+        setLoading(true);
         fetchMember();
     }, [page])
 
@@ -59,18 +82,18 @@ export default function GroupMember(props: IProps) {
     useEffect(() => {
         window.clearTimeout(searchTimeout.current);
         searchTimeout.current = window.setTimeout(() => {
-            console.log({ inputValue });
-
-
+            setInputValue(inputValue)
+            fetchUsers();
         }, 300);
         return () => window.clearTimeout(searchTimeout.current);
-    }, [inputValue, userDataOriginal]);
+    }, [inputValue]);
 
     return (
         <DialogTemplate
             open={props.open}
             setOpen={props.setOpen}
             title={t('groupMember')}
+            // fullScreen
             content={<>
 
                 <Box mt={2}>
@@ -80,21 +103,33 @@ export default function GroupMember(props: IProps) {
                             getOptionLabel={(value: any) => value.displayName}
                             multiple
                             inputValue={inputValue}
-                            onInputChange={(event, newInputValue) => setInputValue(newInputValue)}
+                            onInputChange={(_, newInputValue) => setInputValue(newInputValue)}
                             sx={{ width: 320 }}
                             value={selectedUsers}
-                            onChange={(event, newValue) => setSelectedUsers(newValue)}
+                            slotProps={{
+                                listbox: {
+                                    onScroll: (event: React.UIEvent<HTMLElement>) => {
+                                        console.log('scrolling');
+                                    }
+                                }
+                            }}
+                            onChange={(_, newValue) => setSelectedUsers(newValue)}
                             renderInput={(params) => <TextField {...params} label="Users" size="small" />}
                         />
+
+                        <Button variant={'contained'} size={'small'}>{t('addGroupMember')}</Button>
                     </Box>
                     <Box mt={2}>
                         <DataTable
                             columns={[
+                                { accessorKey: 'email', header: t('tableHeadEmail'), size: 40 },
+                                { accessorKey: 'displayName', header: t('tableHeadDisplayname') },
+                                { accessorKey: 'roleName', header: t('role') },
                             ]}
-                            data={[]}
-                            pageCount={10}
-                            currentPage={1}
-                            loading={false}
+                            data={data}
+                            pageCount={Math.ceil(rowCount / 10)}
+                            currentPage={page}
+                            loading={loading}
                             onPageChange={setPage}
                         />
                     </Box>

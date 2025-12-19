@@ -28,6 +28,7 @@
         "users": "Users",
         "group": "Groups",
         "groupMember": "Group members",
+        "addGroupMember": "Add group member",
         "manageUserGroup": "Manage user group",
         "description": "Manage user accounts and permissions",
         "invite": "Invite User",
