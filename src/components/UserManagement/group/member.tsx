@@ -4,6 +4,9 @@ import { useTranslations } from 'next-intl';
 import { addMemberToGroup, listGroupMember, listMemberNotInGroup } from '@/service/user.service';
 import { Autocomplete, Box, Button, TextField } from '@mui/material';
 import DataTable from '@/Global/data-table';
+import UniversalAlert from '@/Global/alert';
+import { useAppDispatch } from '@/lib/hooks';
+import { showAlert } from '../../../lib/slices/alertSlice';
 
 interface IProps {
     open: boolean;
@@ -11,8 +14,8 @@ interface IProps {
     groupUUID: string;
 }
 export default function GroupMember(props: IProps) {
+    const dispatch = useAppDispatch();
     const t = useTranslations('userlist')
-
     const [page, setPage] = useState<number>(1);
     const [userPage, setUserPage] = useState<number>(1);
     const [userData, setUserData] = useState([]);
@@ -35,10 +38,32 @@ export default function GroupMember(props: IProps) {
 
         }
     }
+    const fetchMember = async () => {
+        try {
+            const results = await listGroupMember(props.groupUUID, page, 10);
+            setRowCount(results.data.rowCount);
+            setData(results.data.data)
+            setLoading(false);
+
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
 
     const addMembers = async () => {
         try {
+            if (uuids.length === 0) {
+                dispatch(showAlert({ message: t('noUserSelected'), type: 'warning' }));
+                return;
+            }
             await addMemberToGroup(props.groupUUID, uuids);
+            dispatch(showAlert({ message: t('addMemberSuccess'), type: 'success' }));
+            setSelectedUsers([]);
+            setUuids([]);
+            setLoading(true);
+            fetchMember();
+            fetchUsers();
         } catch (error) {
 
         }
@@ -60,19 +85,6 @@ export default function GroupMember(props: IProps) {
     }, [selectedUsers,])
 
     useEffect(() => {
-
-        const fetchMember = async () => {
-            try {
-                const results = await listGroupMember(props.groupUUID, page, 10);
-                setRowCount(results.data.rowCount);
-                setData(results.data.data)
-                setLoading(false);
-
-            } catch (error) {
-                console.log(error);
-
-            }
-        }
         setLoading(true);
         fetchMember();
     }, [page])
@@ -89,52 +101,55 @@ export default function GroupMember(props: IProps) {
     }, [inputValue]);
 
     return (
-        <DialogTemplate
-            open={props.open}
-            setOpen={props.setOpen}
-            title={t('groupMember')}
-            // fullScreen
-            content={<>
+        <>
+        <UniversalAlert />
+            <DialogTemplate
+                open={props.open}
+                setOpen={props.setOpen}
+                title={t('groupMember')}
+                // fullScreen
+                content={<>
 
-                <Box mt={2}>
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-                        <Autocomplete
-                            options={userData}
-                            getOptionLabel={(value: any) => value.displayName}
-                            multiple
-                            inputValue={inputValue}
-                            onInputChange={(_, newInputValue) => setInputValue(newInputValue)}
-                            sx={{ width: 320 }}
-                            value={selectedUsers}
-                            slotProps={{
-                                listbox: {
-                                    onScroll: (event: React.UIEvent<HTMLElement>) => {
-                                        console.log('scrolling');
-                                    }
-                                }
-                            }}
-                            onChange={(_, newValue) => setSelectedUsers(newValue)}
-                            renderInput={(params) => <TextField {...params} label="Users" size="small" />}
-                        />
-
-                        <Button variant={'contained'} size={'small'}>{t('addGroupMember')}</Button>
-                    </Box>
                     <Box mt={2}>
-                        <DataTable
-                            columns={[
-                                { accessorKey: 'email', header: t('tableHeadEmail'), size: 40 },
-                                { accessorKey: 'displayName', header: t('tableHeadDisplayname') },
-                                { accessorKey: 'roleName', header: t('role') },
-                            ]}
-                            data={data}
-                            pageCount={Math.ceil(rowCount / 10)}
-                            currentPage={page}
-                            loading={loading}
-                            onPageChange={setPage}
-                        />
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                            <Autocomplete
+                                options={userData}
+                                getOptionLabel={(value: any) => value.displayName}
+                                multiple
+                                inputValue={inputValue}
+                                onInputChange={(_, newInputValue) => setInputValue(newInputValue)}
+                                sx={{ width: 320 }}
+                                value={selectedUsers}
+                                slotProps={{
+                                    listbox: {
+                                        onScroll: (event: React.UIEvent<HTMLElement>) => {
+                                            console.log('scrolling');
+                                        }
+                                    }
+                                }}
+                                onChange={(_, newValue) => setSelectedUsers(newValue)}
+                                renderInput={(params) => <TextField {...params} label="Users" size="small" />}
+                            />
+
+                            <Button variant={'contained'} size={'small'} onClick={addMembers}>{t('addGroupMember')}</Button>
+                        </Box>
+                        <Box mt={2}>
+                            <DataTable
+                                columns={[
+                                    { accessorKey: 'email', header: t('tableHeadEmail'), size: 40 },
+                                    { accessorKey: 'displayName', header: t('tableHeadDisplayname') },
+                                    { accessorKey: 'roleName', header: t('role') },
+                                ]}
+                                data={data}
+                                pageCount={Math.ceil(rowCount / 10)}
+                                currentPage={page}
+                                loading={loading}
+                                onPageChange={setPage}
+                            />
+                        </Box>
                     </Box>
-                </Box>
-            </>}
-        />
+                </>}
+            />
+        </>
     )
 }

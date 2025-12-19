@@ -5,8 +5,8 @@ const createNextIntlPlugin = require('next-intl/plugin');
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig = {
-    // assetPrefix: '/admin',
-    basePath: '/admin',
+    assetPrefix: '/admin',
+    // basePath: '/admin',
 };
 
 module.exports = withNextIntl(nextConfig);

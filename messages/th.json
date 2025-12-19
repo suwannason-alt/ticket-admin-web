@@ -29,6 +29,8 @@
         "group": "กลุ่ม",
         "groupMember": "สมาชิกในกลุ่ม",
         "addGroupMember": "เพิ่มสมาชิกกลุ่ม",
+        "addMemberSuccess": "เพิ่มสมาชิกในกลุ่มสำเร็จ",
+        "noUserSelected": "ไม่ได้เลือกผู้ใช้งาน",
         "manageUserGroup": "จัดการสมาชิกในกลุ่ม",
         "description": "จัดการบัญชีและสิทธิ์ผู้ใช้งาน",
         "invite": "เชิญผู้ใช้งาน",

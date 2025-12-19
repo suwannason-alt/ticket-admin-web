@@ -8,13 +8,13 @@ import { EnvexProvider } from '@daniel-rose/envex';
 import { getPublicEnv } from '@daniel-rose/envex/server';
 import TokenProvider from '@/components/Providers/TokenPrivider';
 import EnvProvider from '@/components/Providers/envProvider';
+import AlertProvider from '@/components/Providers/alertProvider';
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Admin",
   description: "Admin for manage ticket system.",
-  // metadataBase: new URL('/admin', 'http://localhost:3000'),
 };
 
 export default async function RootLayout({
@@ -33,9 +33,11 @@ export default async function RootLayout({
             <NextIntlClientProvider>
               <Providers>
                 <EnvProvider>
-                  <TokenProvider>
-                    {children}
-                  </TokenProvider>
+                  <AlertProvider>
+                    <TokenProvider>
+                      {children}
+                    </TokenProvider>
+                  </AlertProvider>
                 </EnvProvider>
               </Providers>
             </NextIntlClientProvider>

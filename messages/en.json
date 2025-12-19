@@ -29,6 +29,8 @@
         "group": "Groups",
         "groupMember": "Group members",
         "addGroupMember": "Add group member",
+        "addMemberSuccess": "Member(s) added to group successfully",
+        "noUserSelected": "No user selected",
         "manageUserGroup": "Manage user group",
         "description": "Manage user accounts and permissions",
         "invite": "Invite User",

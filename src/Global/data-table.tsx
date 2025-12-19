@@ -6,11 +6,11 @@ import { ITableColumn } from './interface/data-table';
 
 interface IProps {
   columns: ITableColumn[],
-  onPageChange: Dispatch<SetStateAction<number>>
+  onPageChange?: Dispatch<SetStateAction<number>>
   onRowSelect?: Dispatch<MRT_RowSelectionState>,
   data: any[];
-  pageCount: number;
-  loading: boolean;
+  pageCount?: number;
+  loading?: boolean;
   currentPage?: number;
 }
 
@@ -55,28 +55,30 @@ export default function DataTable(props: IProps) {
     return col;
   });
 
-  if (props.loading) return <div style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>;
+  if (props.loading) return <div style={{ height: 250, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>;
 
   return (
     <>
 
-        <MaterialReactTable
-          columns={columnsWithStickyStyle}
-          data={data}
-          enablePagination
-          manualPagination
-          enableTopToolbar={false}
-          renderBottomToolbar={
+      <MaterialReactTable
+        columns={columnsWithStickyStyle}
+        data={data}
+        enablePagination
+        manualPagination
+        enableTopToolbar={false}
+        renderBottomToolbar={
+          (pageCount && onPageChange) ?
             <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '5px' }} className='mt-2'>
               <PaginationComponent currentPage={props.currentPage} onPageChange={onPageChange} pageCount={pageCount} />
             </div>
-          }
-          enableStickyHeader
-          enableSorting={false}
-          enableRowSelection={Boolean(onRowSelect)}
-          onRowSelectionChange={setRowSelection}
-          state={{ rowSelection, isLoading: props.loading }}
-        />
+            : <></>
+        }
+        enableStickyHeader
+        enableSorting={false}
+        enableRowSelection={Boolean(onRowSelect)}
+        onRowSelectionChange={setRowSelection}
+        state={{ rowSelection, isLoading: props.loading }}
+      />
     </>
   );
 }
