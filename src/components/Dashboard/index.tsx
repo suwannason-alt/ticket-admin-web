@@ -55,12 +55,6 @@ export default function DashboardView() {
             <Typography variant="body2" color="text.secondary">
               {profile?.description}
             </Typography>
-            <Chip
-              label={`${profile?.subscription.plan} Plan`}
-              size="small"
-              color="primary"
-              sx={{ mt: 1 }}
-            />
           </Box>
         }
         skeleton={{
@@ -132,7 +126,7 @@ export default function DashboardView() {
                           Location
                         </Typography>
                         <Typography variant="body2">
-                          {profile.address.city}, {profile.address.state}
+                          {profile.city}, {profile.state}
                         </Typography>
                       </Box>
                       <Box>
@@ -140,9 +134,9 @@ export default function DashboardView() {
                           Subscription Status
                         </Typography>
                         <Chip
-                          label={profile.subscription.status.toUpperCase()}
+                          label={'active'}
                           size="small"
-                          color={profile.subscription.status === 'active' ? 'success' : 'warning'}
+                          color={'success'}
                         />
                       </Box>
                     </Box>
@@ -157,9 +151,9 @@ export default function DashboardView() {
                         value={75}
                         sx={{ height: 8, borderRadius: 4, mb: 1 }}
                       />
-                      <Typography variant="caption" color="text.secondary">
+                      {/* <Typography variant="caption" color="text.secondary">
                         {profile.subscription.features.length} of {profile.subscription.features.length + 2} features enabled
-                      </Typography>
+                      </Typography> */}
                     </Box>
                   </>
                 )}

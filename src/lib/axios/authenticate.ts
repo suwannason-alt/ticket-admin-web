@@ -84,10 +84,6 @@ export default async function authenticated() {
     }, async (error) => {
 
         const originalRequest = error.config;
-        // console.log(error.response?.status === 401 && originalRequest.url.indexOf(REFRESH_TOKEN_PATH) !== -1);
-        console.log({ originalRequest: originalRequest.url, REFRESH_TOKEN_PATH, idxOf: originalRequest.url.indexOf(REFRESH_TOKEN_PATH) });
-        console.log(error.response?.status);
-
 
         if (error.response?.status === 401 && originalRequest.url !== REFRESH_TOKEN_PATH) {
 

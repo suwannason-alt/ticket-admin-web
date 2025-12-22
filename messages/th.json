@@ -67,6 +67,9 @@
     },
     "companyProfile": {
         "title": "ข้อมูลบริษัท",
+        "cancel": "ยกเลิก",
+        "saveChange": "บันทึกการเปลี่ยนแปลง",
+        "updateSuccess": "อัปเดตข้อมูลบริษัทสำเร็จ",
         "description": "จัดข้อมูลภายของบริษัท",
         "sections": "เมนู",
         "basicInfimation": "ข้อมูลพื้นฐาน",

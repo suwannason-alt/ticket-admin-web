@@ -4,7 +4,6 @@ import { useTranslations } from 'next-intl';
 import { addMemberToGroup, listGroupMember, listMemberNotInGroup } from '@/service/user.service';
 import { Autocomplete, Box, Button, TextField } from '@mui/material';
 import DataTable from '@/Global/data-table';
-import UniversalAlert from '@/Global/alert';
 import { useAppDispatch } from '@/lib/hooks';
 import { showAlert } from '../../../lib/slices/alertSlice';
 
@@ -102,7 +101,6 @@ export default function GroupMember(props: IProps) {
 
     return (
         <>
-        <UniversalAlert />
             <DialogTemplate
                 open={props.open}
                 setOpen={props.setOpen}

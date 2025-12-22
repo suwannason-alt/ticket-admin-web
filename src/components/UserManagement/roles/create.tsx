@@ -36,7 +36,6 @@ export default function CreateRole(props: IProps) {
 
     const onSubmit = async (data: FormData) => {
         try {
-
             reset();
         } catch (error) {
             console.error('Failed to create role:', error);

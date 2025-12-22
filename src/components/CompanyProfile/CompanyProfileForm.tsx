@@ -23,8 +23,11 @@ import {
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import {
   fetchCompanyProfile,
+  setCompany,
 } from '@/lib/slices/companyProfileSlice';
 import { useTranslations } from 'next-intl';
+import { updateCompanyProfile } from '@/service/company.service';
+import { showAlert } from '../../lib/slices/alertSlice';
 
 
 export default function CompanyProfileForm() {
@@ -54,17 +57,27 @@ export default function CompanyProfileForm() {
     setIsEditing(false);
   };
 
+
+  const handleSave = async () => {
+    try {
+      if (profile) {
+        const result = await updateCompanyProfile(profile.uuid, formData);
+        dispatch(setCompany(result.data))
+        setIsEditing(false);
+        dispatch(showAlert({ message: t('updateSuccess'), severity: 'success' }));
+      }
+    } catch (err: any) {
+    }
+  };
+
   const handleFieldChange = (field: string, value: any) => {
     setFormData((prev: any) => ({ ...prev, [field]: value }));
   };
 
-  const handleNestedFieldChange = (parentField: string, field: string, value: any) => {
+  const handleNestedFieldChange = (field: string, value: any) => {
     setFormData((prev: any) => ({
       ...prev,
-      [parentField]: {
-        ...prev[parentField],
-        [field]: value,
-      },
+      [field]: value,
     }));
   };
 
@@ -101,15 +114,15 @@ export default function CompanyProfileForm() {
               startIcon={<Cancel />}
               onClick={handleCancel}
             >
-              Cancel
+              {t('cancel')}
             </Button>
             <Button
               variant="contained"
               startIcon={<Save />}
-              // onClick={handleSave}
+              onClick={handleSave}
               disabled={loading}
             >
-              Save Changes
+              {t('saveChange')}
             </Button>
           </Box>
         )}
@@ -216,8 +229,8 @@ export default function CompanyProfileForm() {
                       <TextField
                         label="Phone"
                         fullWidth
-                        value={formData.phone || ''}
-                        onChange={(e) => handleFieldChange('phone', e.target.value)}
+                        value={formData.telephone || ''}
+                        onChange={(e) => handleFieldChange('telephone', e.target.value)}
                         disabled={!isEditing}
                       />
                     </Box>
@@ -236,10 +249,10 @@ export default function CompanyProfileForm() {
                   <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2 }} mt={2}>
                     <Box sx={{ gridColumn: '1 / -1' }}>
                       <TextField
-                        label="Street Address"
+                        label="Address"
                         fullWidth
-                        value={formData.address?.street || ''}
-                        onChange={(e) => handleNestedFieldChange('address', 'street', e.target.value)}
+                        value={formData?.address || ''}
+                        onChange={(e) => handleNestedFieldChange('address', e.target.value)}
                         disabled={!isEditing}
                       />
                     </Box>
@@ -247,26 +260,26 @@ export default function CompanyProfileForm() {
                       <TextField
                         label="City"
                         fullWidth
-                        value={formData.address?.city || ''}
-                        onChange={(e) => handleNestedFieldChange('address', 'city', e.target.value)}
+                        value={formData?.city || ''}
+                        onChange={(e) => handleNestedFieldChange('city', e.target.value)}
                         disabled={!isEditing}
                       />
                     </Box>
                     <Box>
                       <TextField
-                        label="State/Province"
+                        label="Province"
                         fullWidth
-                        value={formData.address?.state || ''}
-                        onChange={(e) => handleNestedFieldChange('address', 'state', e.target.value)}
+                        value={formData?.state || ''}
+                        onChange={(e) => handleNestedFieldChange('state', e.target.value)}
                         disabled={!isEditing}
                       />
                     </Box>
                     <Box>
                       <TextField
-                        label="ZIP/Postal Code"
+                        label="Postal Code"
                         fullWidth
-                        value={formData.address?.zipCode || ''}
-                        onChange={(e) => handleNestedFieldChange('address', 'zipCode', e.target.value)}
+                        value={formData?.postalCode || ''}
+                        onChange={(e) => handleNestedFieldChange('postalCode', e.target.value)}
                         disabled={!isEditing}
                       />
                     </Box>
@@ -274,8 +287,8 @@ export default function CompanyProfileForm() {
                       <TextField
                         label="Country"
                         fullWidth
-                        value={formData.address?.country || ''}
-                        onChange={(e) => handleNestedFieldChange('address', 'country', e.target.value)}
+                        value={formData?.country || ''}
+                        onChange={(e) => handleNestedFieldChange('country', e.target.value)}
                         disabled={!isEditing}
                       />
                     </Box>

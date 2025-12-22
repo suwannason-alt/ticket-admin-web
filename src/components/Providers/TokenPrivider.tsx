@@ -5,7 +5,7 @@ import { useAppSelector, useAppDispatch } from '@/lib/hooks';
 import { getCurrentUser } from '@/lib/slices/authSlice';
 import { Skeleton } from '@mui/material';
 import Cookies from 'js-cookie';
-import { fetchRoles, fetchUsers } from '@/lib/slices/userManagementSlice';
+import { fetchRoles } from '@/lib/slices/userManagementSlice';
 
 export default function TokenProvider({ children }: { children: React.ReactNode }) {
 
@@ -28,7 +28,6 @@ export default function TokenProvider({ children }: { children: React.ReactNode 
             if (token) {
                 const userAction = await dispatch(getCurrentUser());
                 const roleAction = await dispatch(fetchRoles())
-                dispatch(fetchUsers())
 
                 if (userAction.meta.requestStatus === 'fulfilled' && userAction.payload) {
                     userFetched = true;

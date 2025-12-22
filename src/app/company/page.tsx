@@ -1,4 +1,3 @@
-'use client';
 
 import CompanyProfileForm from '@/components/CompanyProfile/CompanyProfileForm';
 import DashboardLayout from '@/components/DashboardLayout';

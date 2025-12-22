@@ -66,7 +66,10 @@
         "cancel": "Cancel"
     },
     "companyProfile": {
+        "cancel": "Cancel",
+        "saveChange": "Save change",
         "title": "Company Profile",
+        "updateSuccess": "Company profile updated successfully",
         "description": "Manage your company information",
         "sections": "Sections",
         "basicInfimation": "Basic Information",

@@ -90,35 +90,6 @@ const initialState: UserManagementState = {
   error: null,
 };
 
-// Async thunks for API calls (mock implementations)
-export const fetchUsers = createAsyncThunk('userManagement/fetchUsers', async () => {
-  // Mock API call
-  return new Promise<User[]>((resolve) => {
-    setTimeout(() => {
-      resolve([
-        {
-          id: '1',
-          email: 'admin@company.com',
-          firstName: 'John',
-          lastName: 'Doe',
-          role: {
-            user_uuid: '1',
-            name: 'Administrator',
-            permissions: [],
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            company_uuid: null,
-            role_uuid: '',
-          },
-          status: 'active',
-          lastLogin: new Date().toISOString(),
-          createdAt: new Date().toISOString(),
-        },
-      ]);
-    }, 1000);
-  });
-});
-
 export const fetchRoles = createAsyncThunk<Role>('userManagement/fetchRoles', async () => {
   const userRole = await getUserRole()
   const result = userRole.data;
@@ -174,7 +145,7 @@ export const createRole = createAsyncThunk(
     return new Promise<Role>((resolve) => {
       setTimeout(() => {
         const role: Role = {
-          user_uuid: Math.random().toString(36).substr(2, 9),
+          user_uuid: Math.random().toString(36).substring(2, 9),
           name: roleData.name,
           permissions: roleData.permissions,
           createdAt: new Date().toISOString(),
@@ -214,19 +185,6 @@ const userManagementSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch users
-      .addCase(fetchUsers.pending, (state) => {
-        state.loading.users = true;
-        state.error = null;
-      })
-      .addCase(fetchUsers.fulfilled, (state, action) => {
-        state.loading.users = false;
-        state.users = action.payload;
-      })
-      .addCase(fetchUsers.rejected, (state) => {
-        state.loading.users = false;
-        state.error = 'Failed to fetch users';
-      })
       // Fetch roles
       .addCase(fetchRoles.pending, (state) => {
         state.loading.roles = true;

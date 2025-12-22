@@ -2,6 +2,7 @@
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { useEffect } from 'react';
 import { hideAlert } from '@/lib/slices/alertSlice';
+import UniversalAlert from '../../Global/alert';
 
 export default function AlertProvider({ children }: { children: React.ReactNode }) {
 
@@ -17,5 +18,8 @@ export default function AlertProvider({ children }: { children: React.ReactNode 
         }
     }, [open])
 
-    return <>{children}</>
+    return (<>
+        <UniversalAlert />
+        {children}
+    </>)
 }
