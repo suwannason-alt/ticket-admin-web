@@ -120,3 +120,13 @@ export async function listUser(page: number, limit: number) {
         throw error.response || error.message
     }
 }
+
+export async function inviteUserToCompany(email: string, roleUUID: string) {
+    try {
+        const instance = await authenticated()
+        const response = await instance.post(`/api/v1/users/invite`, { email, role: roleUUID });
+        return response.data;
+    } catch (error: any) {
+        throw error.response || error.message
+    }
+}

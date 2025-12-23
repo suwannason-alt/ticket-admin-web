@@ -29,16 +29,18 @@ interface InviteUserDialogProps {
 
 const schema = yup.object({
   email: yup.string().email('Invalid email format').required('Email is required'),
-  roleId: yup.string().required('Role is required'),
+  role: yup.string().required('Role is required'),
 });
 
 interface FormData {
   email: string;
-  roleId: string;
+  role: string;
 }
 
 export default function InviteUserDialog({ open, onClose }: InviteUserDialogProps) {
-  const t = useTranslations('userlist')
+  const t = useTranslations('userlist');
+  const { system } = useAppSelector((state) => state.role);
+
   const dispatch = useAppDispatch();
   const { roles, loading, error } = useAppSelector((state) => state.userManagement);
   const { user } = useAppSelector((state) => state.auth);
@@ -53,18 +55,20 @@ export default function InviteUserDialog({ open, onClose }: InviteUserDialogProp
     mode: 'onChange',
     defaultValues: {
       email: '',
-      roleId: '',
+      role: '',
     },
   });
 
   const onSubmit = async (data: FormData) => {
     if (user) {
       try {
-        await dispatch(inviteUser({
-          email: data.email,
-          roleId: data.roleId,
-          invitedBy: user.uuid || '',
-        })).unwrap();
+        // await dispatch(inviteUser({
+        //   email: data.email,
+        //   roleId: data.roleId,
+        //   invitedBy: user.uuid || '',
+        // })).unwrap();
+        console.log({ data });
+        
 
         reset();
         onClose();
@@ -98,6 +102,7 @@ export default function InviteUserDialog({ open, onClose }: InviteUserDialogProp
                 {...field}
                 label={t('email')}
                 type="email"
+                size={'medium'}
                 fullWidth
                 margin="normal"
                 error={!!errors.email}
@@ -108,22 +113,25 @@ export default function InviteUserDialog({ open, onClose }: InviteUserDialogProp
           />
 
           <Controller
-            name="roleId"
+            name="role"
             control={control}
             render={({ field }) => (
-              <FormControl fullWidth margin="normal" error={!!errors.roleId}>
-                <InputLabel>{t('role')}</InputLabel>
+              <FormControl fullWidth margin="normal" error={!!errors.role}>
+                <InputLabel shrink={field.value !== ''}>{t('role')}</InputLabel>
                 <Select
                   {...field}
                   label="Role"
+                  variant={'outlined'}
                   disabled={loading.roles}
+                  displayEmpty
+                  size={'medium'}
                 >
+                  {system.map((role) => (
+                    <MenuItem key={role.uuid} value={role.uuid}>
+                      {role.name}
+                    </MenuItem>
+                  ))}
                 </Select>
-                {errors.roleId && (
-                  <Box sx={{ color: 'error.main', fontSize: '0.75rem', mt: 0.5, ml: 2 }}>
-                    {errors.roleId.message}
-                  </Box>
-                )}
               </FormControl>
             )}
           />

@@ -76,5 +76,15 @@
         "address": "Address",
         "companyAddress": "Company Address",
         "editProfile": "Edit Profile"
+    },
+    "invitations": {
+        "title": "Invitations",
+        "description": "Manage and track user invitations",
+        "inviteUser": "Invite User",
+        "pendingInvitations": "Pending Invitations",
+        "role": "Role",
+        "inviteBy": "Invited by",
+        "sent": "Sent",
+        "expires": "Expires"
     }
 }

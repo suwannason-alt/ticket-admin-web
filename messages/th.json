@@ -76,5 +76,15 @@
         "address": "ที่อยู่",
         "companyAddress": "ที่อยู่บริษัท",
         "editProfile": "แก้ไขข้อมูล"
+    },
+    "invitations": {
+        "title": "การเชิญผู้ใช้งาน",
+        "description": "จัดการคำเชิญผู้ใช้งานใหม่เข้าสู่ระบบ",
+        "inviteUser": "เชิญผู้ใช้งาน",
+        "pendingInvitations": "คำเชิญที่รอดำเนินการ",
+        "role": "สิทธิ์การใช้งาน",
+        "inviteBy": "เชิญโดย",
+        "sent": "ส่งเมื่อ",
+        "expires": "หมดอายุเมื่อ"
     }
 }

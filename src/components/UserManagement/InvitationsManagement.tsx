@@ -15,10 +15,13 @@ import {
 import {
   PersonAdd,
 } from '@mui/icons-material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InviteUserDialog from './InviteUserDialog';
+import { useTranslations } from 'next-intl';
+import { useAppSelector } from '../../lib/hooks';
 
 export default function InvitationsManagement() {
+  const t = useTranslations('invitations');
   const [openInvite, setOpenInvite] = useState<boolean>(false);
 
   const [mockInvitations, setMockInvitations] = React.useState(
@@ -72,10 +75,10 @@ export default function InvitationsManagement() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Box>
           <Typography variant="h4" gutterBottom>
-            Invitations
+            {t('title')}
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            Manage user invitations and track their status
+            {t('description')}
           </Typography>
         </Box>
         <Button
@@ -83,19 +86,15 @@ export default function InvitationsManagement() {
           startIcon={<PersonAdd />}
           onClick={() => setOpenInvite(true)}
         >
-          Send Invitation
+          {t('inviteUser')}
         </Button>
       </Box>
-
-      <Alert severity="info" sx={{ mb: 3 }}>
-        This is a demo of the invitations management interface. In a real application, this would show pending invitations with options to resend or cancel them.
-      </Alert>
 
       <Card>
         <CardContent>
           <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <PersonAdd />
-            Pending Invitations ({mockInvitations.filter(inv => inv.status === 'pending').length})
+            {t('pendingInvitations')} ({mockInvitations.filter(inv => inv.status === 'pending').length})
           </Typography>
 
           <List>
@@ -116,11 +115,11 @@ export default function InvitationsManagement() {
                       </Box>
                       <Box sx={{ mt: 0.5 }}>
                         <Typography variant="body2" color={'text.secondary'}>
-                          Role: {invitation?.roleName} • Invited by: {invitation?.invitedBy}
+                          {t('role')}: {invitation?.roleName} • {t('inviteBy')}: {invitation?.invitedBy}
                         </Typography>
                         <Typography variant="caption" color="text.secondary">
-                          Sent: {new Date(invitation.createdAt).toLocaleDateString()} •
-                          Expires: {new Date(invitation.expiresAt).toLocaleDateString()}
+                          {t('sent')}: {new Date(invitation.createdAt).toLocaleDateString()} •
+                          {t('expires')}: {new Date(invitation.expiresAt).toLocaleDateString()}
                         </Typography>
                       </Box>
                     </>
