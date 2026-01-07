@@ -6,7 +6,7 @@ const withNextIntl = createNextIntlPlugin();
 
 const nextConfig = {
     assetPrefix: '/admin',
-    // basePath: '/admin',
+    basePath: process.env.NEXT_PUBLIC_BASE_PATH,
 };
 
 module.exports = withNextIntl(nextConfig);

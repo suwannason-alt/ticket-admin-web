@@ -63,11 +63,11 @@ interface NavItem {
 }
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-
   const t = useTranslations('nav');
   const locale = useLocale();
   const router = useRouter()
   const pathname = usePathname();
+  const basePath = useAppSelector((state) => state.env.basePath)
 
 
   const navigationItems: NavItem[] = [
@@ -75,7 +75,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       id: 'dashboard',
       label: t('dashboard'),
       icon: <Dashboard />,
-      path: '/',
+      path: basePath,
     },
     {
       id: 'user-management',
@@ -86,19 +86,19 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           id: 'users',
           label: t('users'),
           icon: <People />,
-          path: '/users',
+          path: `${basePath}/users`,
         },
         {
           id: 'roles',
           label: t('roleAndPermission'),
           icon: <Security />,
-          path: '/roles',
+          path: `${basePath}/roles`,
         },
         {
           id: 'invitations',
           label: t('invitations'),
           icon: <PersonAdd />,
-          path: '/invitations',
+          path: `${basePath}/invitations`,
           badge: 3,
         },
       ],
@@ -107,19 +107,19 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       id: 'category',
       label: t('category'),
       icon: <Category />,
-      path: '/category',
+      path: `${basePath}/category`,
     },
     {
       id: 'company',
       label: t('companyProfile'),
       icon: <Business />,
-      path: '/company',
+      path: `${basePath}/company`,
     },
     {
       id: 'settings',
       label: t('settings'),
       icon: <Settings />,
-      path: '/settings',
+      path: `${basePath}/settings`,
     },
   ];
 

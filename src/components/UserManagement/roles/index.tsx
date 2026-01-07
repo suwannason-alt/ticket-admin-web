@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Typography,
@@ -11,12 +12,11 @@ import {
 import {
   Add,
 } from '@mui/icons-material';
-import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import { useAppSelector } from '@/lib/hooks';
 import { useTranslations } from 'next-intl';
 import CreateRole from './create';
 import RoleLayout from './layout';
-import Preload from '../../../Global/preload';
-import { readSystemRole } from '@/lib/slices/roleSlice';
+import Preload from '@/Global/preload';
 
 export default function RolesAndPermissions() {
   const t = useTranslations('roleAndPermission')
@@ -24,19 +24,7 @@ export default function RolesAndPermissions() {
   const [selectedRole, setSelectedRole] = useState(null);
   const [tabVale, setTabValue] = useState(0)
 
-  const dispatch = useAppDispatch();
   const { system } = useAppSelector((state) => state.role);
-  const [systemRoleCount, setSystemRoleCount] = useState<number>(0)
-
-  useEffect(() => {
-    if (system.length === 0) {
-      dispatch(readSystemRole())
-    }
-  }, []);
-
-  useEffect(() => {
-    setSystemRoleCount(system.length)
-  }, [system])
 
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -74,7 +62,7 @@ export default function RolesAndPermissions() {
             roles={system}
             selectedRole={selectedRole}
             setSelectedRole={setSelectedRole}
-            count={systemRoleCount} />
+            count={system.length} />
 
         }
           skeleton={{
