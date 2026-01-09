@@ -8,7 +8,8 @@ export default async function getENV() {
     const service = await getEnvByName('SERVICE_UUID') || ''
     const authWeb = await getPublicEnvByName('NEXT_PUBLIC_AUTH_WEB') || ''
     const basePath = await getPublicEnvByName('NEXT_PUBLIC_BASE_PATH') || ''
+    const assetPrefix = await getPublicEnvByName('NEXT_PUBLIC_ASSET_PREFIX') || ''
     
 
-    return { userAPI, credentialAPI, service, authWeb, basePath }
+    return { userAPI, credentialAPI, service, authWeb, basePath, assetPrefix }
 }

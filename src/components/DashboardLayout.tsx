@@ -67,7 +67,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const locale = useLocale();
   const router = useRouter()
   const pathname = usePathname();
-  const basePath = useAppSelector((state) => state.env.basePath)
+  const basePath = useAppSelector((state) => state.env.assetPrefix)
 
 
   const navigationItems: NavItem[] = [

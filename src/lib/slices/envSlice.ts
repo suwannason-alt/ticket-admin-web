@@ -9,6 +9,7 @@ export interface IEnvState {
   authWeb: string;
   loading: boolean;
   basePath: string;
+  assetPrefix: string;
 }
 
 export const readENV = createAsyncThunk('env', async () => {
@@ -24,7 +25,8 @@ const envSlice = createSlice({
         service: '',
         authWeb: '',
         loading: true,
-        basePath: ''
+        basePath: '',
+        assetPrefix: '',
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -34,6 +36,7 @@ const envSlice = createSlice({
             state.service = action.payload.service;
             state.authWeb = action.payload.authWeb;
             state.basePath = action.payload.basePath;
+            state.assetPrefix = action.payload.assetPrefix;
             state.loading = false;
         });
     }
